@@ -1,0 +1,17 @@
+{
+    "name": "heliopsis/ezforms-bundle",
+    "description": "Symfony forms handling within eZPublish contents",
+    "version": "1.0.0",
+    "require": {
+        "symfony/form": ">=2.3",
+        "ezsystems/ezpublish-kernel": ">=5.2"
+    },
+    "autoload": {
+        "psr-0": {"Heliopsis": ""}
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master": "1.0.x-dev"
+        }
+    }
+}
