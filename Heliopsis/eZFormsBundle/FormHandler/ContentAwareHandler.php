@@ -16,12 +16,11 @@ abstract class ContentAwareHandler implements ContentAwareHandlerInterface
 
     /**
      * @param Content $content
-     * @return $this
+     * @return void
      */
     public function setContent(Content $content)
     {
         $this->content = $content;
-        return $this;
     }
 
     /**

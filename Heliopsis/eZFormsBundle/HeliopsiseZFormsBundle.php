@@ -5,10 +5,8 @@
 
 namespace Heliopsis\eZFormsBundle;
 
-
 use Heliopsis\eZFormsBundle\DependencyInjection\Compiler\ServiceAliasesPass;
 use Heliopsis\eZFormsBundle\DependencyInjection\HeliopsisEzFormsExtension;
-use Symfony\Component\DependencyInjection\Container;
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 

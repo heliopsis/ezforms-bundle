@@ -5,26 +5,15 @@
 
 namespace Heliopsis\eZFormsBundle\Controller;
 
-use eZ\Publish\API\Repository\Values\Content\Location;
 use eZ\Publish\Core\MVC\Symfony\Controller\Content\ViewController;
-use eZ\Publish\Core\MVC\Symfony\View\ContentView;
-use eZ\Publish\Core\MVC\Symfony\View\ContentViewInterface;
 use eZ\Publish\Core\MVC\Symfony\View\ViewManagerInterface;
 use Heliopsis\eZFormsBundle\FormFacade\FormFacadeInterface;
-use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\RouterInterface;
-use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use DateTime;
 use Exception;
 
 class FormController extends ViewController
 {
-    /**
-     * Nom de la vue de confirmation
-     */
-    const CONFIRM_VIEW_TYPE = 'confirm';
-
     /**
      * @var \Heliopsis\eZFormsBundle\FormFacade\FormFacadeInterface
      */
@@ -98,14 +87,6 @@ class FormController extends ViewController
         {
             return $this->handleViewException( $response, $params, $e, $viewType, null, $locationId );
         }
-    }
-
-    /**
-     * @return RouterInterface
-     */
-    protected function getRouter()
-    {
-        return $this->container->get( 'router' );
     }
 
     /**

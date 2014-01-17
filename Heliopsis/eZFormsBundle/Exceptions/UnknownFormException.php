@@ -5,7 +5,8 @@
 
 namespace Heliopsis\eZFormsBundle\Exceptions;
 
+use Exception;
 
-class UnknownFormException extends \Exception
+class UnknownFormException extends Exception
 {
 }

@@ -36,7 +36,7 @@ class ServiceAliasesPass implements CompilerPassInterface
     {
         if( !$container->hasParameter( $aliasName ) )
         {
-            throw new InvalidConfigurationException( 'Service ' . $aliasName . ' is not defined' );
+            throw new InvalidConfigurationException( sprintf( 'Service %s is not defined', $aliasName ) );
         }
 
         $alias = $container->getParameter( $aliasName );
@@ -48,12 +48,12 @@ class ServiceAliasesPass implements CompilerPassInterface
 
         if( $alias === $aliasName )
         {
-            throw new InvalidConfigurationException( 'Invalid service: ' . $alias );
+            throw new InvalidConfigurationException( sprintf( 'Service %s cannot be an alias for itself', $alias ) );
         }
 
         if( !$container->hasDefinition( $alias ) )
         {
-            throw new InvalidConfigurationException( 'Service could not be found: ' . $alias );
+            throw new InvalidConfigurationException( printf( 'Service %s is not defined', $alias ) );
         }
 
         $container->setAlias( $aliasName, $alias );

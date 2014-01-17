@@ -13,7 +13,7 @@ use Heliopsis\eZFormsBundle\Exceptions\UnknownFormException;
 interface FormProviderInterface
 {
     /**
-     * @param Location $location
+     * @param \eZ\Publish\API\Repository\Values\Content\Location $location
      * @return \Symfony\Component\Form\FormInterface
      * @throws \Heliopsis\eZFormsBundle\Exceptions\UnknownFormException si aucun formulaire ne correspond
      */

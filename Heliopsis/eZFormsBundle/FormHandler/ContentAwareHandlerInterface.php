@@ -11,7 +11,7 @@ interface ContentAwareHandlerInterface extends FormHandlerInterface
 {
     /**
      * @param Content $content
-     * @return $this
+     * @return void
      */
     public function setContent( Content $content );
 }
