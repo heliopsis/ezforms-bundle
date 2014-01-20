@@ -5,7 +5,6 @@
 
 namespace Heliopsis\eZFormsBundle\Provider;
 
-
 use eZ\Publish\API\Repository\Values\Content\Location;
 use Symfony\Component\Form\FormInterface;
 use Heliopsis\eZFormsBundle\Exceptions\UnknownFormException;

@@ -2,6 +2,17 @@
     "name": "heliopsis/ezforms-bundle",
     "description": "Symfony forms handling within eZPublish contents",
     "version": "1.0.0",
+    "type": "symfony-bundle",
+    "keywords": [ "ezpublish", "forms" ],
+    "authors": [
+        {
+            "name": "Benjamin Choquet",
+            "email": "bchoquet@heliopsis.net"
+        }
+    ],
+    "support": {
+        "source": "https://github.com/Heliopsis-HQ/ezforms-bundle"
+    },
     "require": {
         "symfony/form": ">=2.3",
         "ezsystems/ezpublish-kernel": ">=5.2"

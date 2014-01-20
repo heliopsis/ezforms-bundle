@@ -5,7 +5,6 @@
 
 namespace Heliopsis\eZFormsBundle\FormHandler;
 
-
 use eZ\Publish\API\Repository\Values\Content\Location;
 
 abstract class LocationAwareHandler implements LocationAwareHandlerInterface

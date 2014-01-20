@@ -18,7 +18,7 @@ abstract class ContentAwareHandler implements ContentAwareHandlerInterface
      * @param Content $content
      * @return void
      */
-    public function setContent(Content $content)
+    public function setContent( Content $content )
     {
         $this->content = $content;
     }

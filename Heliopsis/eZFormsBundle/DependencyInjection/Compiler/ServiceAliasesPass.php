@@ -21,10 +21,10 @@ class ServiceAliasesPass implements CompilerPassInterface
      */
     public function process(ContainerBuilder $container)
     {
-        $this->setServiceAlias($container, HeliopsisEzFormsExtension::FACADE_SERVICE_ID);
-        $this->setServiceAlias($container, HeliopsisEzFormsExtension::FORM_PROVIDER_SERVICE_ID);
-        $this->setServiceAlias($container, HeliopsisEzFormsExtension::HANDLER_PROVIDER_SERVICE_ID);
-        $this->setServiceAlias($container, HeliopsisEzFormsExtension::RESPONSE_PROVIDER_SERVICE_ID);
+        $this->setServiceAlias( $container, HeliopsisEzFormsExtension::FACADE_SERVICE_ID );
+        $this->setServiceAlias( $container, HeliopsisEzFormsExtension::FORM_PROVIDER_SERVICE_ID );
+        $this->setServiceAlias( $container, HeliopsisEzFormsExtension::HANDLER_PROVIDER_SERVICE_ID );
+        $this->setServiceAlias( $container, HeliopsisEzFormsExtension::RESPONSE_PROVIDER_SERVICE_ID );
     }
 
     /**
@@ -34,7 +34,7 @@ class ServiceAliasesPass implements CompilerPassInterface
      */
     protected function setServiceAlias( ContainerBuilder $container, $aliasName )
     {
-        if( !$container->hasParameter( $aliasName ) )
+        if ( !$container->hasParameter( $aliasName ) )
         {
             throw new InvalidConfigurationException( sprintf( 'Service %s is not defined', $aliasName ) );
         }
@@ -46,12 +46,12 @@ class ServiceAliasesPass implements CompilerPassInterface
             return;
         }
 
-        if( $alias === $aliasName )
+        if ( $alias === $aliasName )
         {
             throw new InvalidConfigurationException( sprintf( 'Service %s cannot be an alias for itself', $alias ) );
         }
 
-        if( !$container->hasDefinition( $alias ) )
+        if ( !$container->hasDefinition( $alias ) )
         {
             throw new InvalidConfigurationException( printf( 'Service %s is not defined', $alias ) );
         }

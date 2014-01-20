@@ -9,4 +9,4 @@ use Exception;
 
 class BadConfigurationException extends Exception
 {
-} 
+}

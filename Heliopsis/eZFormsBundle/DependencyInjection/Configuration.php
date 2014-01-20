@@ -20,12 +20,13 @@ class Configuration implements ConfigurationInterface
         $treeBuilder = new TreeBuilder();
         $rootNode = $treeBuilder->root( 'heliopsis_ezforms' );
         $rootNode->addDefaultsIfNotSet()
-                 ->children()
+                ->children()
                     ->scalarNode( 'facade' )
                         ->info( 'FormFacadeInterface service ID to use in controller' )
                         ->defaultValue( 'heliopsis_ezforms.facade.default' )
                         ->end()
                     ->arrayNode( 'providers' )
+                        ->info( "These providers are automatically injected into default facade" )
                         ->addDefaultsIfNotSet()
                         ->children()
                             ->scalarNode( 'form' )
@@ -42,8 +43,7 @@ class Configuration implements ConfigurationInterface
                                 ->end()
                             ->end()
                         ->end()
-                    ->end()
-        ;
+                    ->end();
 
         return $treeBuilder;
     }

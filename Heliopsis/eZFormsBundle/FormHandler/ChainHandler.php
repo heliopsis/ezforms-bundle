@@ -33,7 +33,7 @@ class ChainHandler implements LocationAwareHandlerInterface
         /**
          * @var FormHandlerInterface $handler
          */
-        foreach( $handlers as $handler )
+        foreach ( $handlers as $handler )
         {
             $this->addHandler( $handler );
         }
@@ -58,7 +58,7 @@ class ChainHandler implements LocationAwareHandlerInterface
         /**
          * @var FormHandlerInterface $handler
          */
-        foreach( $this->handlers as $handler )
+        foreach ( $this->handlers as $handler )
         {
             $handler->handle( $data );
         }
@@ -67,16 +67,16 @@ class ChainHandler implements LocationAwareHandlerInterface
     /**
      * Ajout le `$content` aux handlers implémentants `ContentAwareHandler`
      */
-    public function setLocation(Location $location) {
-
-        foreach( $this->handlers as $handler )
+    public function setLocation( Location $location )
+    {
+        foreach ( $this->handlers as $handler )
         {
-            if( $handler instanceof LocationAwareHandlerInterface )
+            if ( $handler instanceof LocationAwareHandlerInterface )
             {
                 $handler->setLocation( $location );
             }
 
-            if( $handler instanceof ContentAwareHandlerInterface)
+            if ( $handler instanceof ContentAwareHandlerInterface )
             {
                 $handler->setContent( $this->contentService->loadContentByContentInfo( $location->contentInfo ) );
             }

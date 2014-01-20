@@ -36,7 +36,7 @@ class DefaultFormFacade implements FormFacadeInterface
      * @param FormProviderInterface $formProvider
      * @param HandlerProviderInterface $handlerProvider
      */
-    function __construct(FormProviderInterface $formProvider = null, HandlerProviderInterface $handlerProvider = null, ResponseProviderInterface $responseProvider = null )
+    function __construct(FormProviderInterface $formProvider = null, HandlerProviderInterface $handlerProvider = null, ResponseProviderInterface $responseProvider = null)
     {
         $this->formProvider = $formProvider;
         $this->handlerProvider = $handlerProvider;
@@ -78,7 +78,7 @@ class DefaultFormFacade implements FormFacadeInterface
      */
     public function getForm(Location $location)
     {
-        if( null === $this->formProvider )
+        if ( null === $this->formProvider )
         {
             throw new UnknownFormException();
         }
@@ -93,7 +93,7 @@ class DefaultFormFacade implements FormFacadeInterface
      */
     public function getHandler(Location $location)
     {
-        if( null === $this->handlerProvider )
+        if ( null === $this->handlerProvider )
         {
             return new NullHandler();
         }
@@ -108,13 +108,12 @@ class DefaultFormFacade implements FormFacadeInterface
      */
     public function getResponse(Location $location, $data)
     {
-        if( null === $this->responseProvider )
+        if ( null === $this->responseProvider )
         {
             throw new BadConfigurationException( "No Response Provider set in default FormFacade" );
         }
 
         return $this->responseProvider->getResponse( $location, $data );
     }
-
 
 }

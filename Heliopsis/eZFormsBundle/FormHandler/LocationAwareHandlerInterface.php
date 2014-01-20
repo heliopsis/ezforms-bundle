@@ -14,4 +14,4 @@ interface LocationAwareHandlerInterface extends FormHandlerInterface
      * @return void
      */
     public function setLocation( Location $location );
-} 
+}

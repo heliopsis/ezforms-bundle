@@ -5,7 +5,6 @@
 
 namespace Heliopsis\eZFormsBundle\Provider\Response;
 
-
 use eZ\Publish\API\Repository\Values\Content\Location;
 use Heliopsis\eZFormsBundle\Provider\ResponseProviderInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -33,11 +32,10 @@ class RedirectToConfirmViewResponseProvider implements ResponseProviderInterface
         $this->confirmViewType = $confirmViewType;
     }
 
-
     /**
      * @return Response
      */
-    public function getResponse(Location $location, $data)
+    public function getResponse( Location $location, $data )
     {
         return new RedirectResponse(
             $this->urlGenerator->generate(
@@ -49,5 +47,4 @@ class RedirectToConfirmViewResponseProvider implements ResponseProviderInterface
             )
         );
     }
-
-} 
+}

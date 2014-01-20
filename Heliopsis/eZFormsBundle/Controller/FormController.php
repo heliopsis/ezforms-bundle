@@ -57,10 +57,10 @@ class FormController extends ViewController
             $location = $this->getRepository()->getLocationService()->loadLocation( $locationId );
             $form = $this->formFacade->getForm( $location );
 
-            if( 'POST' === $request->getMethod() )
+            if ( 'POST' === $request->getMethod() )
             {
                 $form->submit( $this->getRequest() );
-                if( $form->isValid() )
+                if ( $form->isValid() )
                 {
                     $data = $form->getData();
                     $handler = $this->formFacade->getHandler( $location );
@@ -100,7 +100,7 @@ class FormController extends ViewController
      */
     protected function buildResponse( $etag = null, DateTime $lastModified = null )
     {
-        if( 'POST' === $this->getRequest()->getMethod() )
+        if ( 'POST' === $this->getRequest()->getMethod() )
         {
             $response = new Response();
             $response->setPrivate();

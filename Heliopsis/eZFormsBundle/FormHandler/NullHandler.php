@@ -5,7 +5,6 @@
 
 namespace Heliopsis\eZFormsBundle\FormHandler;
 
-
 class NullHandler implements FormHandlerInterface
 {
     /**

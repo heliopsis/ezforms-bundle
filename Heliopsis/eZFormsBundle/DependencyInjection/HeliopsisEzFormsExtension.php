@@ -31,11 +31,11 @@ class HeliopsisEzFormsExtension extends Extension
         $configuration = new Configuration();
         $config = $this->processConfiguration( $configuration, $configs );
 
-        $loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
-        $loader->load('services.yml');
+        $loader = new Loader\YamlFileLoader( $container, new FileLocator( __DIR__.'/../Resources/config' ) );
+        $loader->load( 'services.yml' );
 
+        //Services to use are stored as parameters and will be processes by Compiler\ServiceAliasesPass
         $container->setParameter( self::FACADE_SERVICE_ID, $config['facade'] );
-
         $container->setParameter( self::FORM_PROVIDER_SERVICE_ID, $config['providers']['form'] );
         $container->setParameter( self::HANDLER_PROVIDER_SERVICE_ID, $config['providers']['handler'] );
         $container->setParameter( self::RESPONSE_PROVIDER_SERVICE_ID, $config['providers']['response'] );
