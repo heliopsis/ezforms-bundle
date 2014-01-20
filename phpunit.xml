@@ -1,0 +1,19 @@
+<phpunit
+        backupGlobals="false"
+        backupStaticAttributes="false"
+        bootstrap="bootstrap.php"
+        convertErrorsToExceptions="true"
+        convertNoticesToExceptions="true"
+        convertWarningsToExceptions="true"
+        >
+    <testsuites>
+        <testsuite name="eZ\Publish\Core\Base">
+            <directory>Heliopsis/eZFormsBundle/Tests</directory>
+        </testsuite>
+    </testsuites>
+    <filter>
+        <whitelist>
+            <directory suffix=".php">Heliopsis</directory>
+        </whitelist>
+    </filter>
+</phpunit>
