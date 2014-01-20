@@ -17,6 +17,7 @@
         "symfony/form": ">=2.3",
         "ezsystems/ezpublish-kernel": ">=5.2"
     },
+    "licence": [ "proprietary" ],
     "autoload": {
         "psr-0": {"Heliopsis": ""}
     },
