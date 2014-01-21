@@ -7,7 +7,6 @@
 
 namespace Heliopsis\eZFormsBundle\Tests\Provider;
 
-
 use eZ\Publish\Core\Repository\Values\Content\Location;
 use Heliopsis\eZFormsBundle\Provider\Response\RedirectToConfirmViewResponseProvider;
 
@@ -34,7 +33,6 @@ class RedirectToConfirmViewResponseProviderTest extends \PHPUnit_Framework_TestC
         $this->mockViewType = 'mockViewType';
         $this->provider = new RedirectToConfirmViewResponseProvider( $this->mockUrlGenerator, $this->mockViewType );
     }
-
 
     public function testGetResponse()
     {

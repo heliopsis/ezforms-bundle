@@ -28,7 +28,7 @@ abstract class ContentAwareHandler implements ContentAwareHandlerInterface
     /**
      * @return Content
      */
-    protected function getContent()
+    public function getContent()
     {
         return $this->content;
     }

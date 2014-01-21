@@ -105,8 +105,9 @@ class DefaultFormFacade implements FormFacadeInterface
 
     /**
      * @param Location $location
-     * @parma mixed $data
+     * @param mixed $data
      * @return Response
+     * @throws \Heliopsis\eZFormsBundle\Exceptions\BadConfigurationException
      */
     public function getResponse(Location $location, $data)
     {
