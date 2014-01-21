@@ -42,7 +42,7 @@ class ServiceAliasesPass implements CompilerPassInterface
         }
 
         $alias = $container->getParameter( $aliasName );
-        if( !$alias )
+        if ( !$alias )
         {
             //alias is not configured
             return;
