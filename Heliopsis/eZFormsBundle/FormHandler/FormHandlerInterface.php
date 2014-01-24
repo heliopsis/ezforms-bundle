@@ -10,7 +10,7 @@ namespace Heliopsis\eZFormsBundle\FormHandler;
 interface FormHandlerInterface
 {
     /**
-     * Exécute le traitement
+     * Does whatever needs to be done with $data
      * @param mixed $data
      * @return void
      */
