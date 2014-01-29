@@ -269,7 +269,7 @@ use Heliopsis\eZFormsBundle\FormHandler\FormHandlerInterface;
 use Swift_Mailer;
 use \Twig_Environment;
 
-class CustomFormHandler implements FormHandlerInterface
+class EmailHandler implements FormHandlerInterface
 {
     /**
      * @var string
@@ -353,7 +353,74 @@ These handler types (interfaces and abstract classes are available) allow you to
 when handling data (i.e. specify administrator email in a content field or indicate location URL somewhere).
 
 If your handler implements one of these interfaces, ChainHandler and DefaultFacade will inject location or content
-before handling data;
+before handling data.
+
+For example if you need to use content related data in your handler class, you could modify your `EmailHandler`
+like this :
+```php
+<?php
+//Acme/FormsBundle/Handlers/EmailHandler.php
+
+namespace Acme\FormsBundle\FormHandler;
+
+use Heliopsis\eZFormsBundle\FormHandler\ContentAwareHandler;
+use Swift_Mailer;
+use \Twig_Environment;
+
+class EmailHandler extends ContentAwareHandler
+{
+    /**
+     * @var string
+     */
+    private $template;
+
+    /**
+     * @var \Swift_Mailer
+     */
+    private $mailer;
+
+    /**
+     * @var \Twig_Environment
+     */
+    private $templating;
+
+    /**
+     * @var \Swift_Mailer $mailer
+     * @var
+     * @var string $template
+     * @var string $recipient
+     */
+    public function __construct( Swift_Mailer $mailer, Twig_Environment $templating, $template )
+    {
+        $this->mailer = $mailer;
+        $this->templating = $templating;
+        $this->template = $template;
+    }
+
+    /**
+     * Does whatever needs to be done with $data
+     * @param mixed $data
+     * @return void
+     */
+    public function handle( $data )
+    {
+        $content = $this->getContent();
+        $body = $this->templating->render(
+            $this->template,
+            array(
+                'data' => $data,
+                'content' => $content,
+            )
+        );
+        $message = \Swift_Message::newInstance();
+        $message->setSubject("Sent Data");
+        $message->setTo( $content->getFieldValue( 'recipient' )->text );
+        $message->setBody($body, 'text/html');
+        $this->mailer->send($message);
+    }
+}
+```
+
 
 ### Views
 
