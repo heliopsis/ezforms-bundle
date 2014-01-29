@@ -261,14 +261,50 @@ to storing it in a database. They simply get the data passed, this bundles does 
 
 ```php
 <?php
-//Acme/FormsBundle/Handlers/CustomFormHandler.php
+//Acme/FormsBundle/Handlers/EmailHandler.php
 
-namespace Acme\FormsBundle\Providers;
+namespace Acme\FormsBundle\FormHandler;
 
 use Heliopsis\eZFormsBundle\FormHandler\FormHandlerInterface;
+use Swift_Mailer;
+use \Twig_Environment;
 
 class CustomFormHandler implements FormHandlerInterface
 {
+    /**
+     * @var string
+     */
+    private $recipient;
+
+    /**
+     * @var string
+     */
+    private $template;
+
+    /**
+     * @var \Swift_Mailer
+     */
+    private $mailer;
+
+    /**
+     * @var \Twig_Environment
+     */
+    private $templating;
+
+    /**
+     * @var \Swift_Mailer $mailer
+     * @var
+     * @var string $template
+     * @var string $recipient
+     */
+    public function __construct( Swift_Mailer $mailer, Twig_Environment $templating, $template, $recipient )
+    {
+        $this->mailer = $mailer;
+        $this->templating = $templating;
+        $this->template = $template;
+        $this->recipient = $recipient;
+    }
+
     /**
      * Does whatever needs to be done with $data
      * @param mixed $data
@@ -276,10 +312,18 @@ class CustomFormHandler implements FormHandlerInterface
      */
     public function handle( $data )
     {
-        $this->doWhateverNeedsToBeDone( $data );
+        $body = $this->templating->render(
+            $this->template,
+            array(
+                'data' => $data
+            )
+        );
+        $message = \Swift_Message::newInstance();
+        $message->setSubject("Sent Data");
+        $message->setTo($this->recipient)
+        $message->setBody($body, 'text/html');
+        $this->mailer->send($message);
     }
-
-    ...
 }
 ```
 
