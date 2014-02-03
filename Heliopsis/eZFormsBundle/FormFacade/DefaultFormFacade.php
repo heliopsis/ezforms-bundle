@@ -65,7 +65,7 @@ class DefaultFormFacade implements FormFacadeInterface
 
     /**
      * @param \Heliopsis\eZFormsBundle\Provider\ResponseProviderInterface $responseProvider
-     * @return DefaultFormFacade
+     * @return void
      */
     public function setResponseProvider(ResponseProviderInterface $responseProvider)
     {
@@ -73,10 +73,10 @@ class DefaultFormFacade implements FormFacadeInterface
     }
 
     /**
-     * Renvoie le formulaire symfony correspondant au contenu eZPublish
-     * @param Location $location
+     * Returns symfony form to display at $location
+     * @param \eZ\Publish\API\Repository\Values\Content\Location $location
      * @return \Symfony\Component\Form\FormInterface
-     * @throws \Heliopsis\eZFormsBundle\Exceptions\UnknownFormException si aucun formulaire ne correspond
+     * @throws \Heliopsis\eZFormsBundle\Exceptions\UnknownFormException if no form matches $location
      */
     public function getForm(Location $location)
     {
@@ -89,8 +89,8 @@ class DefaultFormFacade implements FormFacadeInterface
     }
 
     /**
-     * Renvoie le handler de formulaire correspondant au contenu eZPublish
-     * @param Location $location
+     * Returns form handler to use at $location
+     * @param \eZ\Publish\API\Repository\Values\Content\Location $location
      * @return \Heliopsis\eZFormsBundle\FormHandler\FormHandlerInterface
      */
     public function getHandler(Location $location)
@@ -104,9 +104,10 @@ class DefaultFormFacade implements FormFacadeInterface
     }
 
     /**
-     * @param Location $location
+     * Creates HTTP Response to be returned by controller
+     * @param \eZ\Publish\API\Repository\Values\Content\Location $location
      * @param mixed $data
-     * @return Response
+     * @return \Symfony\Component\HttpFoundation\Response
      * @throws \Heliopsis\eZFormsBundle\Exceptions\BadConfigurationException
      */
     public function getResponse(Location $location, $data)

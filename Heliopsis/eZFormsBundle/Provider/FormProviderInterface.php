@@ -14,9 +14,10 @@ use Heliopsis\eZFormsBundle\Exceptions\UnknownFormException;
 interface FormProviderInterface
 {
     /**
+     * Returns symfony form to display at $location
      * @param \eZ\Publish\API\Repository\Values\Content\Location $location
      * @return \Symfony\Component\Form\FormInterface
-     * @throws \Heliopsis\eZFormsBundle\Exceptions\UnknownFormException si aucun formulaire ne correspond
+     * @throws \Heliopsis\eZFormsBundle\Exceptions\UnknownFormException if no form matches $location
      */
     public function getForm( Location $location );
 }

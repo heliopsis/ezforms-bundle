@@ -13,6 +13,7 @@ use Heliopsis\eZFormsBundle\FormHandler\FormHandlerInterface;
 interface HandlerProviderInterface
 {
     /**
+     * Returns form handler to use at $location
      * @param \eZ\Publish\API\Repository\Values\Content\Location $location
      * @return \Heliopsis\eZFormsBundle\FormHandler\FormHandlerInterface
      */

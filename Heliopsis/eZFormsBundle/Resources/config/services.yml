@@ -9,6 +9,7 @@ parameters:
 
 services:
 
+  # synthetic services are really defined in DependencyInjection\Compiler\ServiceAliasesPass
   heliopsis_ezforms.facade:
     synthetic: true
 
@@ -21,15 +22,15 @@ services:
   heliopsis_ezforms.response_provider:
     synthetic: true
 
-  heliopsis_ezforms.facade.default:
-    class: %heliopsis_ezforms.facade.default.class%
-    arguments: [ @heliopsis_ezforms.form_provider, @heliopsis_ezforms.handler_provider, @heliopsis_ezforms.response_provider ]
-
   heliopsis_ezforms.controller:
     class: %heliopsis_ezforms.controller.class%
     arguments: [ @heliopsis_ezforms.facade, @ezpublish.view_manager ]
     calls:
       - [ 'setContainer', [ @service_container ] ]
+
+  heliopsis_ezforms.facade.default:
+    class: %heliopsis_ezforms.facade.default.class%
+    arguments: [ @heliopsis_ezforms.form_provider, @heliopsis_ezforms.handler_provider, @heliopsis_ezforms.response_provider ]
 
   heliopsis_ezforms.handlers.null:
     class: %heliopsis_ezforms.handlers.null.class%

@@ -1,5 +1,9 @@
 <?php
 /**
+ * ChainHandler Class
+ *
+ * Allows to chain multiple handlers one after the other
+ *
  * @author: Benjamin Choquet <bchoquet@heliopsis.net>
  * @copyright: Copyright (C) 2014 Heliopsis. All rights reserved.
  * @licence: proprietary
@@ -10,11 +14,6 @@ namespace Heliopsis\eZFormsBundle\FormHandler;
 use eZ\Publish\API\Repository\ContentService;
 use eZ\Publish\API\Repository\Values\Content\Location;
 
-/**
- * Class ChainHandler
- * Chaîne le traitement de plusieurs handlers
- * @package Heliopsis\eZFormsBundle\FormHandler
- */
 class ChainHandler implements LocationAwareHandlerInterface
 {
 
@@ -42,7 +41,7 @@ class ChainHandler implements LocationAwareHandlerInterface
     }
 
     /**
-     * Ajoute un handler en bout de chaine
+     * Adds a handler at the end of the chain
      * @param FormHandlerInterface $handler
      */
     public function addHandler( FormHandlerInterface $handler )
@@ -51,7 +50,6 @@ class ChainHandler implements LocationAwareHandlerInterface
     }
 
     /**
-     * Exécute le traitement
      * @param mixed $data
      * @return void
      */
@@ -67,7 +65,8 @@ class ChainHandler implements LocationAwareHandlerInterface
     }
 
     /**
-     * Ajout le `$content` aux handlers implémentants `ContentAwareHandler`
+     * Passes content and/or location to location and/or content aware handlers
+     * @param \eZ\Publish\API\Repository\Values\Content\Location $location
      */
     public function setLocation( Location $location )
     {

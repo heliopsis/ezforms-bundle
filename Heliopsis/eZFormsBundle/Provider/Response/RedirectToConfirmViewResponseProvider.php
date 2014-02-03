@@ -27,6 +27,7 @@ class RedirectToConfirmViewResponseProvider implements ResponseProviderInterface
 
     /**
      * @param UrlGeneratorInterface $urlGenerator
+     * @param string $confirmViewType
      */
     function __construct(UrlGeneratorInterface $urlGenerator, $confirmViewType )
     {
@@ -35,6 +36,8 @@ class RedirectToConfirmViewResponseProvider implements ResponseProviderInterface
     }
 
     /**
+     * @param \eZ\Publish\API\Repository\Values\Content\Location $location
+     * @param mixed $data
      * @return Response
      */
     public function getResponse( Location $location, $data )

@@ -1,5 +1,10 @@
 <?php
 /**
+ * Class ServiceAliasesPass
+ *
+ * Sets which facade and provider services should be used by form controller
+ * Service names are loaded from container parameters which are themselves set in HeliopsisEzFormsExtension
+ *
  * @author: Benjamin Choquet <bchoquet@heliopsis.net>
  * @copyright: Copyright (C) 2014 Heliopsis. All rights reserved.
  * @licence: proprietary

@@ -12,7 +12,7 @@ use eZ\Publish\API\Repository\Values\Content\Location;
 interface LocationAwareHandlerInterface extends FormHandlerInterface
 {
     /**
-     * @param Location $location
+     * @param \eZ\Publish\API\Repository\Values\Content\Location $location
      * @return void
      */
     public function setLocation( Location $location );

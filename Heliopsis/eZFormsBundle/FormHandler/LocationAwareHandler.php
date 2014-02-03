@@ -12,12 +12,12 @@ use eZ\Publish\API\Repository\Values\Content\Location;
 abstract class LocationAwareHandler implements LocationAwareHandlerInterface
 {
     /**
-     * @var Location
+     * @var \eZ\Publish\API\Repository\Values\Content\Location
      */
     private $location;
 
     /**
-     * @param Location $location
+     * @param \eZ\Publish\API\Repository\Values\Content\Location $location
      * @return void
      */
     public function setLocation(Location $location)
