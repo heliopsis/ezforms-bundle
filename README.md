@@ -1,7 +1,7 @@
 ezforms-bundle
 ==============
 
-This bundle provides a flexible way to associate Symfony forms to eZPublish contents.
+This bundle provides a flexible way to associate [http://symfony.com/doc/current/book/forms.html](Symfony forms) to eZPublish contents.
 
 Features:
 
@@ -34,7 +34,7 @@ Installation
 }
 ```
 
-### 2. Enable bundle in
+### 2. Enable bundle in `EzPublishKernel.php`
 
 ``` php
 <?php
@@ -60,7 +60,7 @@ heliopsis_ezforms:
     handler: acme_forms.custom_handler_provider
 ```
 
-*NB:* see Usage section for service definitions
+*NB: see Usage section for service definitions*
 
 
 ### 4. Use form controller to render your locations views
@@ -133,7 +133,7 @@ class FormProvider implements FormProviderInterface
     /**
      * @param \eZ\Publish\API\Repository\Values\Content\Location $location
      * @return \Symfony\Component\Form\FormInterface
-     * @throws \Heliopsis\eZFormsBundle\Exceptions\UnknownFormException si aucun formulaire ne correspond
+     * @throws \Heliopsis\eZFormsBundle\Exceptions\UnknownFormException
      */
     public function getForm( Location $location )
     {
@@ -161,8 +161,8 @@ parameters:
 
 services:
   acme_forms.custom_form_provider:
-  class: %acme_forms.custom_form_provider.class%
-  arguments: [@form.factory]
+    class: %acme_forms.custom_form_provider.class%
+    arguments: [@form.factory]
 
 ```
 
@@ -238,8 +238,8 @@ parameters:
 
 services:
   acme_forms.custom_handler_provider:
-  class: %acme_forms.custom_handler_provider.class%
-  arguments: [@acme_forms.handlers.logger]
+    class: %acme_forms.custom_handler_provider.class%
+    arguments: [@acme_forms.handlers.logger]
 
 ```
 
@@ -319,7 +319,7 @@ class EmailHandler implements FormHandlerInterface
             )
         );
         $message = \Swift_Message::newInstance();
-        $message->setSubject("Sent Data");
+        $message->setSubject("Data sent");
         $message->setTo($this->recipient)
         $message->setBody($body, 'text/html');
         $this->mailer->send($message);
@@ -327,7 +327,7 @@ class EmailHandler implements FormHandlerInterface
 }
 ```
 
-This bundle does provide any implementation but only a few utility classes and interfaces:
+This bundle does not provide any implementation but only a few utility classes and interfaces:
 
 #### ChainHandler
 
@@ -357,6 +357,7 @@ before handling data.
 
 For example if you need to use content related data in your handler class, you could modify your `EmailHandler`
 like this :
+
 ```php
 <?php
 //Acme/FormsBundle/Handlers/EmailHandler.php
@@ -424,6 +425,83 @@ class EmailHandler extends ContentAwareHandler
 
 ### Views
 
+Views are ordinary content views. They are rendered by eZPublish's ViewManager so you may rely on your ordinary
+view providers matching configuration. You only need to use the bundle's controller service for your main views.
+Your template will be passed the symfony form view in a `form` parameter.
+
+```yml
+# ezpublish/config/ezpublish.yml
+
+ezpublish:
+  system:
+    frontend_group:
+      location_view:
+        full:
+          form:
+            controller: heliopsis_ezforms.controller:formAction
+            template: AcmeFormsBundle:full:form.html.twig
+            match:
+              Identifier\ContentType: 'form'
+```
+
+```jinja
+
+{# Acme/FormsBundle/Resources/views/full/form.html.twig #}
+
+{% extends 'AcmeFormsBundle::pagelayout.html.twig' %}
+
+{% block content %}
+    <section>
+        <header>
+            <h1>{{ ez_content_name( content ) }}</h1>
+            {{ ez_render_field( content, 'introduction_text' ) }}
+        </header>
+
+    {{ form( form ) }}
+
+    </section>
+{% endblock content %}
+
+```
+
+
+The `confirm` view used by default ResponseProvider is nothing but a dedicated view for your eZPublish location,
+it's up to you to configure what should be displayed on this page.
+Note that the form controller should not be used at this staged unless you want to display another form.
+
+
+```yml
+# ezpublish/config/ezpublish.yml
+
+ezpublish:
+  system:
+    frontend_group:
+      location_view:
+        confirm:
+          form:
+            template: AcmeFormsBundle:full:form_confirm.html.twig
+            match:
+              Identifier\ContentType: 'form'
+```
+
+```jinja
+
+{# Acme/FormsBundle/Resources/views/full/form_confirm.html.twig #}
+
+{% extends 'AcmeFormsBundle::pagelayout.html.twig' %}
+
+{% block content %}
+    <section>
+        <header>
+            <h1>{{ ez_content_name( content ) }}</h1>
+        </header>
+
+        {{ ez_render_field( content, 'confirmation_text' ) }}
+
+    </section>
+{% endblock content %}
+
+```
 
 
 Advanced Usage
@@ -431,5 +509,160 @@ Advanced Usage
 
 ### Response provider
 
+If you want to go beyond simple one-off forms and say chain multiple forms to create some kind of funnel,
+you can define a custom ResponseProvider the way you already defined custom form and handler providers :
+
+
+```php
+<?php
+//Acme/FormsBundle/Providers/MultiStepResponseProvider.php
+
+namespace Acme\FormsBundle\Providers;
+
+use Heliopsis\eZFormsBundle\Provider\ResponseProviderInterface;
+use Heliopsis\eZFormsBundle\Exceptions\BadConfigurationException;
+use eZ\Publish\API\Repository\Values\Content\Location;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+use Acme\FormsBundle\MultiStepFormData;
+
+class MultiStepResponseProvider implements ResponseProviderInterface
+{
+    /**
+     * @var UrlGeneratorInterface
+     */
+    private $urlGenerator;
+
+    /**
+     * @param UrlGeneratorInterface $urlGenerator
+     */
+    function __construct(UrlGeneratorInterface $urlGenerator )
+    {
+        $this->urlGenerator = $urlGenerator;
+    }
+
+    /**
+     * @param \eZ\Publish\API\Repository\Values\Content\Location $location
+     * @param mixed $data
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    public function getResponse(Location $location, $data)
+    {
+        if( !$data instanceof MultiStepFormData )
+        {
+            throw new BadConfigurationException( "Response Provider can only be used with MultiStepFormData" );
+        }
+
+        $nextStep = $data->getNextStep();
+
+        return new RedirectResponse(
+            $this->urlGenerator->generate(
+                $nextStep->getRoute(),
+                $nextStep->getRouteParams()
+            );
+        );
+    }
+}
+```
+
+You then need to define your provider as a service:
+
+```yaml
+# Acme/FormsBundle/Resources/config/services.yml
+
+parameters:
+    acme_forms.multistep_response_provider.class: Acme\FormsBundle\Providers\MultiStepResponseProvider
+
+services:
+  acme_forms.multistep_response_provider:
+    class: %acme_forms.multistep_response_provider.class%
+    arguments: [@router]
+
+```
+
+... and tell ezforms-bundle to use it as your default response provider:
+
+```yaml
+# ezpublish/config/config.yml
+
+heliopsis_ezforms:
+  providers:
+    response: acme_forms.multistep_response_provider
+```
+
 
 ### Custom facade
+
+Finally, maybe you've got yourself in a much more complex situation where you need to closely couple form generation,
+data handling and / or funnel logic. This can be achieved with a custom facade :
+
+
+```php
+<?php
+//Acme/FormsBundle/FormFacade/CustomFormFacade.php
+
+namespace Acme\FormsBundle\FormFacade;
+
+use Heliopsis\eZFormsBundle\FormFacade\FormFacadeInterface;
+use Heliopsis\eZFormsBundle\Exceptions\UnknownFormException;
+use Heliopsis\eZFormsBundle\FormHandler\FormHandlerInterface;
+use eZ\Publish\API\Repository\Values\Content\Location;
+use Symfony\Component\Form\FormInterface;
+use Symfony\Component\HttpFoundation\Response;
+
+class CustomFormFacade implements FormFacadeInterface
+{
+    /**
+     * @param \eZ\Publish\API\Repository\Values\Content\Location $location
+     * @return \Symfony\Component\Form\FormInterface
+     * @throws \Heliopsis\eZFormsBundle\Exceptions\UnknownFormException
+     */
+    public function getForm( Location $location )
+    {
+        ...
+    }
+
+    /**
+     * @param \eZ\Publish\API\Repository\Values\Content\Location $location
+     * @return \Heliopsis\eZFormsBundle\FormHandler\FormHandlerInterface
+     */
+    public function getHandler( Location $location )
+    {
+        ...
+    }
+
+    /**
+     * @param \eZ\Publish\API\Repository\Values\Content\Location $location
+     * @param mixed $data
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    public function getResponse(Location $location, $data)
+    {
+        ...
+    }
+
+}
+
+```
+
+
+```yaml
+# Acme/FormsBundle/Resources/config/services.yml
+
+parameters:
+    acme_forms.custom_facade.class: Acme\FormsBundle\Providers\MultiStepResponseProvider
+
+services:
+  acme_forms.custom_facade:
+    class: %acme_forms.custom_facade.class%
+    ...
+
+```
+
+```yaml
+# ezpublish/config/config.yml
+
+heliopsis_ezforms:
+  facade: acme_forms.custom_facade
+```
