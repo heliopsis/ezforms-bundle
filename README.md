@@ -18,7 +18,7 @@ custom forms and leverage eZPublish's content tree to access or configure those 
 License
 -------
 
-    TODO
+This bundle is released under GPL2
 
 
 Installation
