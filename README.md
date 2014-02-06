@@ -1,7 +1,7 @@
 ezforms-bundle
 ==============
 
-This bundle provides a flexible way to associate [http://symfony.com/doc/current/book/forms.html](Symfony forms) to eZPublish contents.
+This bundle provides a flexible way to associate [Symfony forms](http://symfony.com/doc/current/book/forms.html) to [eZPublish](https://github.com/ezsystems/ezpublish-community) contents.
 
 Features:
 
