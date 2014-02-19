@@ -444,7 +444,7 @@ ezpublish:
               Identifier\ContentType: 'form'
 ```
 
-```jinja
+```twig
 
 {# Acme/FormsBundle/Resources/views/full/form.html.twig #}
 
@@ -484,7 +484,7 @@ ezpublish:
               Identifier\ContentType: 'form'
 ```
 
-```jinja
+```twig
 
 {# Acme/FormsBundle/Resources/views/full/form_confirm.html.twig #}
 
