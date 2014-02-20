@@ -11,7 +11,7 @@
         }
     ],
     "support": {
-        "source": "https://github.com/Heliopsis-HQ/ezforms-bundle"
+        "source": "https://github.com/heliopsis/ezforms-bundle"
     },
     "require": {
         "symfony/form": ">=2.3",
