@@ -8,7 +8,7 @@ Features:
 - Form controller extending eZPublish's view controller
 - Facade pattern for flexible form handling
 - Separate interfaces for form instanciation, data handling and response generation
-- Abtract classes for content related data handling
+- Abstract classes for content related data handling
 - Unit tests
 
 *NB:* this bundle does not provide out of the box forms in eZPublish, it rather gives you tools to easily define
