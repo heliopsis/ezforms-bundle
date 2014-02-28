@@ -253,20 +253,6 @@ heliopsis_ezforms:
     handler: acme_forms.custom_handler_provider
 ```
 
-#### SingleHandlerProvider
-
-For simple use cases where you use the same handler for all of your forms, a SingleHandlerProvider is available:
-
-```yml
-# Acme/FormsBundle/Resources/config/services.yml
-
-services:
-  acme_forms.custom_handler_provider:
-    class: %heliopsis_ezforms.handler_provider.single_handler.class%
-    arguments: [@acme_forms.handlers.logger]
-
-```
-
 ### Form handler(s)
 
 You may define as many form handlers as you want, they may do anything you wish with forms data from emailing it
@@ -365,8 +351,8 @@ services:
 These handler types (interfaces and abstract classes are available) allow you to use eZPublish content as context
 when handling data (i.e. specify administrator email in a content field or indicate location URL somewhere).
 
-If your handler implements one of these interfaces, ChainHandler and DefaultFacade will inject location or content
-before handling data.
+If your handler implements one of these interfaces, ChainHandler, DefaultFacade and SingleHandlerProvider will inject
+location or content before handling data.
 
 For example if you need to use content related data in your handler class, you could modify your `EmailHandler`
 like this :
@@ -433,6 +419,20 @@ class EmailHandler extends ContentAwareHandler
         $this->mailer->send($message);
     }
 }
+```
+
+#### SingleHandlerProvider
+
+For simple use cases where you use the same handler for all of your forms, a SingleHandlerProvider is available:
+
+```yml
+# Acme/FormsBundle/Resources/config/services.yml
+
+services:
+  acme_forms.custom_handler_provider:
+    class: %heliopsis_ezforms.handler_provider.single_handler.class%
+    arguments: [@acme_forms.handlers.logger, @ezpublish.api.service.content]
+
 ```
 
 
