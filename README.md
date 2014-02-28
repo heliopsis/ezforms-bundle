@@ -253,6 +253,19 @@ heliopsis_ezforms:
     handler: acme_forms.custom_handler_provider
 ```
 
+#### SingleHandlerProvider
+
+For simple use cases where you use the same handler for all of your forms, a SingleHandlerProvider is available:
+
+```yml
+# Acme/FormsBundle/Resources/config/services.yml
+
+services:
+  acme_forms.custom_handler_provider:
+    class: %heliopsis_ezforms.handler_provider.single_handler.class%
+    arguments: [@acme_forms.handlers.logger]
+
+```
 
 ### Form handler(s)
 
