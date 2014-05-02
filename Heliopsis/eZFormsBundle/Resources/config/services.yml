@@ -25,7 +25,7 @@ services:
 
   heliopsis_ezforms.controller:
     class: %heliopsis_ezforms.controller.class%
-    arguments: [ @heliopsis_ezforms.facade, @ezpublish.view_manager ]
+    arguments: [ @heliopsis_ezforms.facade, @ezpublish.view_manager, @ezpublish.api.service.content ]
     calls:
       - [ 'setContainer', [ @service_container ] ]
 

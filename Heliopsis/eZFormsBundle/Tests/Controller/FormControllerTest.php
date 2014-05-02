@@ -61,14 +61,14 @@ class FormControllerTest extends \PHPUnit_Framework_TestCase
      */
     private $mockRequest;
 
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    private $mockContentService;
+
     public function setUp()
     {
         $this->mockLocation = $this->getMock( 'eZ\\Publish\\API\\Repository\\Values\\Content\\Location' );
-        $this->mockLocation->expects( $this->any() )
-            ->method( '__get' )
-            ->with( 'id' )
-            ->will( $this->returnValue( $this->dummyLocationId ) );
-
         $this->mockFormView = $this->getMock( 'Symfony\\Component\\Form\\FormView' );
 
         $this->mockForm = $this->getMockBuilder( 'Symfony\\Component\\Form\\Form' )
@@ -89,7 +89,11 @@ class FormControllerTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->controller = new FormController( $this->mockFacade, $this->mockViewManager );
+        $this->mockContentService = $this->getMockBuilder( 'eZ\\Publish\\API\\Repository\\ContentService' )
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->controller = new FormController( $this->mockFacade, $this->mockViewManager, $this->mockContentService );
     }
 
     private function setupContainer( $requestMethod = 'GET', $securityGranted = true )
@@ -238,6 +242,28 @@ class FormControllerTest extends \PHPUnit_Framework_TestCase
 
     public function testValidFormData()
     {
+        $mockData = new \StdClass();
+        $mockData->attribute = 'mock data';
+
+        $mockHandler = $this->getMock( 'Heliopsis\\eZFormsBundle\\FormHandler\\FormHandlerInterface' );
+        $mockHandler->expects( $this->once() )
+            ->method( 'handle' )
+            ->with( $this->identicalTo( $mockData ) );
+
+        $this->setupHandlerTest( $mockHandler, $mockData );
+
+        $mockResponse = $this->getMock( 'Symfony\\Component\\HttpFoundation\\Response' );
+        $this->mockFacade->expects( $this->once() )
+            ->method( 'getResponse' )
+            ->with( $this->identicalTo( $this->mockLocation ), $this->identicalTo( $mockData ) )
+            ->will( $this->returnValue( $mockResponse ) );
+
+        $response = $this->controller->formAction( $this->dummyLocationId, 'view_type' );
+        $this->assertSame( $mockResponse, $response );
+    }
+
+    private function setupHandlerTest( $mockHandler, $mockData )
+    {
         $this->setupContainer( 'POST' );
 
         $this->mockForm->expects( $this->once() )
@@ -248,30 +274,64 @@ class FormControllerTest extends \PHPUnit_Framework_TestCase
             ->method( 'isValid' )
             ->will( $this->returnValue( true ) );
 
-        $mockData = new \StdClass();
-        $mockData->attribute = 'mock data';
-
         $this->mockForm->expects( $this->once() )
             ->method( 'getData' )
             ->will( $this->returnValue( $mockData ) );
-
-        $mockHandler = $this->getMock( 'Heliopsis\\eZFormsBundle\\FormHandler\\FormHandlerInterface' );
-        $mockHandler->expects( $this->once() )
-            ->method( 'handle' )
-            ->with( $this->identicalTo( $mockData ) );
 
         $this->mockFacade->expects( $this->once() )
             ->method( 'getHandler' )
             ->with( $this->identicalTo( $this->mockLocation ) )
             ->will( $this->returnValue( $mockHandler ) );
+    }
 
-        $mockResponse = $this->getMock( 'Symfony\\Component\\HttpFoundation\\Response' );
-        $this->mockFacade->expects( $this->once() )
-            ->method( 'getResponse' )
-            ->with( $this->identicalTo( $this->mockLocation ), $this->identicalTo( $mockData ) )
-            ->will( $this->returnValue( $mockResponse ) );
+    public function testHandlerLocationInjection()
+    {
+        $mockData = new \StdClass();
+        $mockData->attribute = 'mock data';
 
-        $response = $this->controller->formAction( $this->dummyLocationId, 'view_type' );
-        $this->assertSame( $mockResponse, $response );
+        $mockHandler = $this->getMock( 'Heliopsis\\eZFormsBundle\\FormHandler\\LocationAwareHandlerInterface' );
+        $mockHandler->expects( $this->once() )
+            ->method( 'handle' )
+            ->with( $this->identicalTo( $mockData ) );
+
+        $this->setupHandlerTest( $mockHandler, $mockData );
+
+        $mockHandler->expects( $this->once() )
+            ->method( 'setLocation' )
+            ->with( $this->identicalTo( $this->mockLocation ) );
+
+        $this->controller->formAction( $this->dummyLocationId, 'view_type' );
+    }
+
+    public function testHandlerContentInjection()
+    {
+        $mockData = new \StdClass();
+        $mockData->attribute = 'mock data';
+
+        $mockHandler = $this->getMock( 'Heliopsis\\eZFormsBundle\\FormHandler\\ContentAwareHandlerInterface' );
+        $mockHandler->expects( $this->once() )
+            ->method( 'handle' )
+            ->with( $this->identicalTo( $mockData ) );
+
+        $this->setupHandlerTest( $mockHandler, $mockData );
+
+        $mockContentInfo = $this->getMock( 'eZ\\Publish\\API\\Repository\\Values\\Content\\ContentInfo' );
+        $mockContent = $this->getMock( 'eZ\\Publish\\API\\Repository\\Values\\Content\\Content' );
+
+        $this->mockLocation->expects( $this->once() )
+            ->method( '__get' )
+            ->with( 'contentInfo' )
+            ->will( $this->returnValue( $mockContentInfo ) );
+
+        $this->mockContentService->expects( $this->once() )
+            ->method( 'loadContentByContentInfo' )
+            ->with( $mockContentInfo )
+            ->will( $this->returnValue( $mockContent ) );
+
+        $mockHandler->expects( $this->once() )
+            ->method( 'setContent' )
+            ->with( $this->identicalTo( $mockContent ) );
+
+        $this->controller->formAction( $this->dummyLocationId, 'view_type' );
     }
 }

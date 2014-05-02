@@ -10,26 +10,18 @@
 
 namespace Heliopsis\eZFormsBundle\FormHandler;
 
-use eZ\Publish\API\Repository\ContentService;
+use eZ\Publish\API\Repository\Values\Content\Content;
 use eZ\Publish\API\Repository\Values\Content\Location;
 
-class ChainHandler implements LocationAwareHandlerInterface
+class ChainHandler implements LocationAwareHandlerInterface, ContentAwareHandlerInterface
 {
-
     private $handlers = array();
-
-    /**
-     * @var ContentService
-     */
-    private $contentService;
 
     /**
      * @param array $handlers
      */
-    public function __construct( ContentService $contentService, array $handlers )
+    public function __construct( array $handlers )
     {
-        $this->contentService = $contentService;
-
         /**
          * @var FormHandlerInterface $handler
          */
@@ -64,7 +56,7 @@ class ChainHandler implements LocationAwareHandlerInterface
     }
 
     /**
-     * Passes content and/or location to location and/or content aware handlers
+     * Passes location to location aware handlers
      * @param \eZ\Publish\API\Repository\Values\Content\Location $location
      */
     public function setLocation( Location $location )
@@ -75,10 +67,20 @@ class ChainHandler implements LocationAwareHandlerInterface
             {
                 $handler->setLocation( $location );
             }
+        }
+    }
 
+    /**
+     * Passes content to content aware handlers
+     * @param \eZ\Publish\API\Repository\Values\Content\Content $content
+     */
+    public function setContent( Content $content )
+    {
+        foreach ( $this->handlers as $handler )
+        {
             if ( $handler instanceof ContentAwareHandlerInterface )
             {
-                $handler->setContent( $this->contentService->loadContentByContentInfo( $location->contentInfo ) );
+                $handler->setContent( $content );
             }
         }
     }

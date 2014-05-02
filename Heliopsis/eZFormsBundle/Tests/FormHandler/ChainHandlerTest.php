@@ -11,19 +11,12 @@ use Heliopsis\eZFormsBundle\FormHandler\ChainHandler;
 class ChainHandlerTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
-     */
-    private $mockContentService;
-
-    /**
      * @var mixed
      */
     private $mockData;
 
     protected function setUp()
     {
-        $this->mockContentService = $this->getMock( 'eZ\\Publish\\API\\Repository\\ContentService' );
-
         $this->mockData = new \StdClass();
         $this->mockData->attribute = 'mock data';
     }
@@ -34,7 +27,7 @@ class ChainHandlerTest extends \PHPUnit_Framework_TestCase
      */
     private function getHandler( array $subHandlers = array() )
     {
-        return new ChainHandler( $this->mockContentService, $subHandlers );
+        return new ChainHandler( $subHandlers );
     }
 
     public function testHandle()
@@ -86,31 +79,27 @@ class ChainHandlerTest extends \PHPUnit_Framework_TestCase
     public function testSetLocation()
     {
         $mockLocationAwareHandler = $this->getMock( 'Heliopsis\\eZFormsBundle\\FormHandler\\LocationAwareHandlerInterface' );
-        $mockContentAwareHandler = $this->getMock( 'Heliopsis\\eZFormsBundle\\FormHandler\\ContentAwareHandlerInterface' );
-
-        $mockContentInfo = $this->getMock( 'eZ\\Publish\\API\\Repository\\Values\\Content\\ContentInfo' );
-        $mockContent = $this->getMock( 'eZ\\Publish\\API\\Repository\\Values\\Content\\Content' );
-
         $mockLocation = $this->getMock( 'eZ\\Publish\\API\\Repository\\Values\\Content\\Location' );
-        $mockLocation->expects( $this->once() )
-            ->method( '__get' )
-            ->with( 'contentInfo' )
-            ->will( $this->returnValue( $mockContentInfo ) );
-
-        $this->mockContentService->expects( $this->once() )
-            ->method( 'loadContentByContentInfo' )
-            ->with( $mockContentInfo )
-            ->will( $this->returnValue( $mockContent ) );
 
         $mockLocationAwareHandler->expects( $this->once() )
             ->method( 'setLocation' )
             ->with( $this->identicalTo( $mockLocation ) );
 
+        $handler = $this->getHandler( array( $mockLocationAwareHandler ) );
+        $handler->setLocation( $mockLocation );
+    }
+
+    public function testSetContent()
+    {
+        $mockContentAwareHandler = $this->getMock( 'Heliopsis\\eZFormsBundle\\FormHandler\\ContentAwareHandlerInterface' );
+        $mockContent = $this->getMock( 'eZ\\Publish\\API\\Repository\\Values\\Content\\Content' );
+
         $mockContentAwareHandler->expects( $this->once() )
             ->method( 'setContent' )
             ->with( $this->identicalTo( $mockContent ) );
 
-        $handler = $this->getHandler( array( $mockLocationAwareHandler, $mockContentAwareHandler ) );
-        $handler->setLocation( $mockLocation );
+        $handler = $this->getHandler( array( $mockContentAwareHandler ) );
+        $handler->setContent( $mockContent );
+
     }
 }

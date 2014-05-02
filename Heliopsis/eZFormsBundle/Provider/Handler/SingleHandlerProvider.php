@@ -6,11 +6,8 @@
 
 namespace Heliopsis\eZFormsBundle\Provider\Handler;
 
-use eZ\Publish\API\Repository\ContentService;
 use eZ\Publish\API\Repository\Values\Content\Location;
-use Heliopsis\eZFormsBundle\FormHandler\ContentAwareHandlerInterface;
 use Heliopsis\eZFormsBundle\FormHandler\FormHandlerInterface;
-use Heliopsis\eZFormsBundle\FormHandler\LocationAwareHandlerInterface;
 use Heliopsis\eZFormsBundle\Provider\HandlerProviderInterface;
 
 class SingleHandlerProvider implements HandlerProviderInterface
@@ -21,18 +18,11 @@ class SingleHandlerProvider implements HandlerProviderInterface
     private $handler;
 
     /**
-     * @var ContentService
-     */
-    private $contentService;
-
-    /**
      * @param FormHandlerInterface $handler
-     * @param ContentService $contentService
      */
-    function __construct( FormHandlerInterface $handler, ContentService $contentService )
+    function __construct( FormHandlerInterface $handler )
     {
         $this->handler = $handler;
-        $this->contentService = $contentService;
     }
 
     /**
@@ -43,16 +33,6 @@ class SingleHandlerProvider implements HandlerProviderInterface
      */
     public function getHandler( Location $location )
     {
-        if ( $this->handler instanceof LocationAwareHandlerInterface )
-        {
-            $this->handler->setLocation( $location );
-        }
-
-        if ( $this->handler instanceof ContentAwareHandlerInterface )
-        {
-            $this->handler->setContent( $this->contentService->loadContentByContentInfo( $location->contentInfo ) );
-        }
-
         return $this->handler;
     }
 }

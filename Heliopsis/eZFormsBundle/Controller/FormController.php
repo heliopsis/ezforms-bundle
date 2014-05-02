@@ -6,9 +6,13 @@
 
 namespace Heliopsis\eZFormsBundle\Controller;
 
+use eZ\Publish\API\Repository\ContentService;
+use eZ\Publish\API\Repository\Values\Content\Location;
 use eZ\Publish\Core\MVC\Symfony\Controller\Content\ViewController;
 use eZ\Publish\Core\MVC\Symfony\View\ViewManagerInterface;
 use Heliopsis\eZFormsBundle\FormFacade\FormFacadeInterface;
+use Heliopsis\eZFormsBundle\FormHandler\ContentAwareHandlerInterface;
+use Heliopsis\eZFormsBundle\FormHandler\LocationAwareHandlerInterface;
 use Symfony\Component\HttpFoundation\Response;
 use DateTime;
 use Exception;
@@ -21,13 +25,23 @@ class FormController extends ViewController
     private $formFacade;
 
     /**
+     * @var \eZ\Publish\API\Repository\ContentService
+     */
+    private $contentService;
+
+    /**
      * @param FormFacadeInterface $formFacade
      * @param ViewManagerInterface $viewManager
      */
-    public function __construct( FormFacadeInterface $formFacade, ViewManagerInterface $viewManager )
+    public function __construct(
+        FormFacadeInterface $formFacade,
+        ViewManagerInterface $viewManager,
+        ContentService $contentService
+    )
     {
         parent::__construct( $viewManager );
         $this->formFacade = $formFacade;
+        $this->contentService = $contentService;
     }
 
     /**
@@ -64,7 +78,7 @@ class FormController extends ViewController
                 if ( $form->isValid() )
                 {
                     $data = $form->getData();
-                    $handler = $this->formFacade->getHandler( $location );
+                    $handler = $this->getHandler( $location );
                     $handler->handle( $data );
 
                     return $this->formFacade->getResponse( $location, $data );
@@ -88,6 +102,26 @@ class FormController extends ViewController
         {
             return $this->handleViewException( $response, $params, $e, $viewType, null, $locationId );
         }
+    }
+
+    /**
+     * @param \eZ\Publish\API\Repository\Values\Content\Location $location
+     * @return \Heliopsis\eZFormsBundle\FormHandler\FormHandlerInterface
+     */
+    private function getHandler( Location $location )
+    {
+        $handler = $this->formFacade->getHandler( $location );
+        if ( $handler instanceof LocationAwareHandlerInterface )
+        {
+            $handler->setLocation( $location );
+        }
+
+        if ( $handler instanceof ContentAwareHandlerInterface )
+        {
+            $handler->setContent( $this->contentService->loadContentByContentInfo( $location->contentInfo ) );
+        }
+
+        return $handler;
     }
 
     /**

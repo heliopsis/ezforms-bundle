@@ -194,7 +194,6 @@ namespace Acme\FormsBundle\Providers;
 
 use Heliopsis\eZFormsBundle\Provider\HandlerProviderInterface;
 use Heliopsis\eZFormsBundle\FormHandler\FormHandlerInterface;
-use Heliopsis\eZFormsBundle\FormHandler\LocationAwareHandlerInterface;
 use eZ\Publish\API\Repository\Values\Content\Location;
 
 class HandlerProvider implements HandlerProviderInterface
@@ -218,11 +217,6 @@ class HandlerProvider implements HandlerProviderInterface
      */
     public function getHandler( Location $location )
     {
-        if ( $this->formHandler instanceof LocationAwareHandlerInterface )
-        {
-            $this->formHandler->setLocation( $location );
-        }
-
         return $this->formHandler;
     }
 }
