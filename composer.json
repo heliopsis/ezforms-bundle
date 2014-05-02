@@ -17,6 +17,16 @@
         "symfony/form": ">=2.3",
         "ezsystems/ezpublish-kernel": ">=5.2"
     },
+    "require-dev": {
+        "swiftmailer/swiftmailer": "*",
+        "symfony/templating": ">=2.3",
+        "symfony/translation": ">=2.3"
+    },
+    "suggest": {
+        "swiftmailer/swiftmailer": "Used by Swift Mailer Handlers to email submitted data",
+        "symfony/templating": "Used by Swift Mailer Handlers to render emails",
+        "symfony/translation": "Used by Swift Mailer Handlers to translate email subject"
+    },
     "license": [ "GPL-2.0" ],
     "autoload": {
         "psr-0": {"Heliopsis": ""}
