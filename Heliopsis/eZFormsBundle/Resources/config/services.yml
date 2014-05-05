@@ -42,3 +42,6 @@ services:
     class: %heliopsis_ezforms.response_provider.redirect_confirm.class%
     arguments: [@router, %heliopsis_ezforms.response_provider.redirect_confirm.view_type%]
 
+  heliopsis_ezforms.handler_provider.null:
+    class: %heliopsis_ezforms.handler_provider.single_handler.class%
+    arguments: [ @heliopsis_ezforms.handlers.null ]

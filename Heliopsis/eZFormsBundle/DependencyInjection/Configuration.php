@@ -36,7 +36,7 @@ class Configuration implements ConfigurationInterface
                                 ->end()
                             ->scalarNode( 'handler' )
                                 ->info( 'HandlerProvider service to use as heliopsis_ezforms.handler_provider' )
-                                ->defaultNull()
+                                ->defaultValue( 'heliopsis_ezforms.handler_provider.null' )
                                 ->end()
                             ->scalarNode( 'response' )
                                 ->info( 'ResponseProvider service to use as heliopsis_ezforms.response_provider' )
