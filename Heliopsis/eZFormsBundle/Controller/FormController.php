@@ -14,6 +14,7 @@ use Heliopsis\eZFormsBundle\FormFacade\FormFacadeInterface;
 use Heliopsis\eZFormsBundle\FormHandler\ContentAwareHandlerInterface;
 use Heliopsis\eZFormsBundle\FormHandler\LocationAwareHandlerInterface;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Security\Core\SecurityContextInterface;
 use DateTime;
 use Exception;
 
@@ -35,11 +36,12 @@ class FormController extends ViewController
      */
     public function __construct(
         FormFacadeInterface $formFacade,
+        ContentService $contentService,
         ViewManagerInterface $viewManager,
-        ContentService $contentService
+        SecurityContextInterface $securityContext
     )
     {
-        parent::__construct( $viewManager );
+        parent::__construct( $viewManager, $securityContext );
         $this->formFacade = $formFacade;
         $this->contentService = $contentService;
     }

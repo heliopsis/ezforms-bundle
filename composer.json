@@ -15,7 +15,7 @@
     },
     "require": {
         "symfony/form": ">=2.3",
-        "ezsystems/ezpublish-kernel": ">=5.2"
+        "ezsystems/ezpublish-kernel": ">=5.3"
     },
     "require-dev": {
         "swiftmailer/swiftmailer": "*",
