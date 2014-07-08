@@ -108,6 +108,7 @@ namespace Acme\FormsBundle\Providers;
 use Heliopsis\eZFormsBundle\Provider\HandlerProviderInterface;
 use Heliopsis\eZFormsBundle\FormHandler\FormHandlerInterface;
 use eZ\Publish\API\Repository\Values\Content\Location;
+use Symfony\Component\Form\FormFactoryInterface;
 
 class HandlerProvider implements HandlerProviderInterface
 {
