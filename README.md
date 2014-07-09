@@ -29,7 +29,7 @@ Installation
 ```js
 {
     require: {
-        "heliopsis/ezforms-bundle": "1.0.*"
+        "heliopsis/ezforms-bundle": "1.1.*"
     }
 }
 ```
