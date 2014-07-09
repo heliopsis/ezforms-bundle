@@ -87,4 +87,5 @@ ezpublish:
 Documentation
 -------------
 
-Detailed documentation is available in the [Resources/doc folder](/Heliopsis/eZFormsBundle/Resources/doc)
+Detailed documentation is available in the [Resources/doc folder](/Heliopsis/eZFormsBundle/Resources/doc/00-index.md)
+When upgrading, don't forget to take a look at the [notes on backwards compatibility](/Heliopsis/eZFormsBundle/Resources/doc/backwards_compatibility.md)
