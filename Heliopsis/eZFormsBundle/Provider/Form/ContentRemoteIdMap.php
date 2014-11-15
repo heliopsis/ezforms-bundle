@@ -42,7 +42,9 @@ class ContentRemoteIdMap implements FormProviderInterface
     }
 
     /**
-     * @inheritdoc
+     * @param Location $location
+     * @return \Symfony\Component\Form\FormInterface
+     * @throws \Heliopsis\eZFormsBundle\Exceptions\UnknownFormException
      */
     public function getForm( Location $location )
     {

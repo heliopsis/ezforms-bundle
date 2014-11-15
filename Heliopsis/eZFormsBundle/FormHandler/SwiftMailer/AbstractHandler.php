@@ -147,7 +147,7 @@ abstract class AbstractHandler implements FormHandlerInterface
     }
 
     /**
-     * Exécute le traitement
+     * Execute the handling
      * @param mixed $data
      * @return void
      */

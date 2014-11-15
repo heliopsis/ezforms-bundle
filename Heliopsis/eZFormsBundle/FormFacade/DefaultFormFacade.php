@@ -36,6 +36,7 @@ class DefaultFormFacade implements FormFacadeInterface
     /**
      * @param FormProviderInterface $formProvider
      * @param HandlerProviderInterface $handlerProvider
+     * @param ResponseProviderInterface $responseProvider
      */
     function __construct(FormProviderInterface $formProvider = null, HandlerProviderInterface $handlerProvider = null, ResponseProviderInterface $responseProvider = null)
     {
