@@ -32,7 +32,9 @@ class FormController extends ViewController
 
     /**
      * @param FormFacadeInterface $formFacade
+     * @param ContentService $contentService
      * @param ViewManagerInterface $viewManager
+     * @param SecurityContextInterface $securityContext
      */
     public function __construct(
         FormFacadeInterface $formFacade,
