@@ -13,10 +13,10 @@ use Heliopsis\eZFormsBundle\FormHandler\NullHandler;
 use Heliopsis\eZFormsBundle\Provider\HandlerProviderInterface;
 
 /**
- * Class ChainMap
+ * Class Chain
  * @package Heliopsis\eZFormsBundle\Provider\Handler
  */
-class ChainMap implements HandlerProviderInterface
+class Chain implements HandlerProviderInterface
 {
 
     /**
@@ -30,15 +30,17 @@ class ChainMap implements HandlerProviderInterface
      */
     public function addProvider( HandlerProviderInterface $handlerProvider, $priority = 0 )
     {
-        if (!array_key_exists($priority, $this->providers)) {
+        if ( !array_key_exists( $priority, $this->providers ) )
+        {
             $this->providers[$priority] = array();
         }
 
-        if(!in_array($handlerProvider,  $this->providers[$priority])) {
+        if ( !in_array( $handlerProvider, $this->providers[$priority] ) )
+        {
             $this->providers[$priority][] = $handlerProvider;
         }
 
-        ksort ( $this->providers );
+        ksort( $this->providers );
     }
 
     /**
@@ -49,10 +51,14 @@ class ChainMap implements HandlerProviderInterface
      */
     public function getHandler( Location $location )
     {
-        foreach ($this->providers as $providersPriority) {
-            foreach ($providersPriority as $provider) {
-                $currentHandler = $provider->getHandler($location);
-                if (! $currentHandler instanceof NullHandler ) {
+        foreach ( $this->providers as $providersPriority )
+        {
+            foreach ( $providersPriority as $provider )
+            {
+                $currentHandler = $provider->getHandler( $location );
+
+                if ( !$currentHandler instanceof NullHandler )
+                {
                     return $currentHandler;
                 }
             }
@@ -60,5 +66,4 @@ class ChainMap implements HandlerProviderInterface
 
         return new NullHandler();
     }
-
 }

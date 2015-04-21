@@ -13,10 +13,10 @@ use Heliopsis\eZFormsBundle\Exceptions\UnknownFormException;
 use Heliopsis\eZFormsBundle\Provider\FormProviderInterface;
 
 /**
- * Class ChainMap
+ * Class Chain
  * @package Heliopsis\eZFormsBundle\Provider\Form
  */
-class ChainMap implements FormProviderInterface
+class Chain implements FormProviderInterface
 {
     /**
      * @var FormProviderInterface[][]
@@ -29,15 +29,17 @@ class ChainMap implements FormProviderInterface
      */
     public function addProvider( FormProviderInterface $formProvider, $priority = 0 )
     {
-        if (!array_key_exists($priority, $this->providers)) {
+        if ( !array_key_exists( $priority, $this->providers ) )
+        {
             $this->providers[$priority] = array();
         }
 
-        if(!in_array($formProvider,  $this->providers[$priority])) {
+        if ( !in_array( $formProvider, $this->providers[$priority] ) )
+        {
             $this->providers[$priority][] = $formProvider;
         }
 
-        ksort ( $this->providers );
+        ksort( $this->providers );
     }
 
     /**
@@ -47,11 +49,16 @@ class ChainMap implements FormProviderInterface
      */
     public function getForm( Location $location )
     {
-        foreach ($this->providers as $providersPriority) {
-            foreach ($providersPriority as $provider) {
-                try {
-                    return $provider->getForm($location);
-                } catch ( UnknownFormException $e) {
+        foreach ( $this->providers as $providersPriority )
+        {
+            foreach ( $providersPriority as $provider )
+            {
+                try
+                {
+                    return $provider->getForm( $location );
+                }
+                catch ( UnknownFormException $e)
+                {
                     continue;
                 }
             }

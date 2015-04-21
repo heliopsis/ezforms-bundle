@@ -17,10 +17,10 @@ use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\Form\FormTypeInterface;
 
 /**
- * Class ContentTypeMap
+ * Class ContentTypeIdentifierMap
  * @package Heliopsis\eZFormsBundle\Provider\Form
  */
-class ContentTypeMap implements FormProviderInterface
+class ContentTypeIdentifierMap implements FormProviderInterface
 {
     /**
      * @var array
@@ -66,9 +66,10 @@ class ContentTypeMap implements FormProviderInterface
         $locationContentTypeId = $location->contentInfo->contentTypeId;
 
         /** @var ContentType $locationContentType */
-        $locationContentType = $this->contentTypeService->loadContentType($locationContentTypeId);
+        $locationContentType = $this->contentTypeService->loadContentType( $locationContentTypeId );
 
-        if ( !array_key_exists($locationContentType->identifier, $this->map) ) {
+        if ( !array_key_exists( $locationContentType->identifier, $this->map ) )
+        {
             throw new UnknownFormException(
                 sprintf( "No form could be mapped to content type identifier '%s'", $locationContentType->identifier )
             );

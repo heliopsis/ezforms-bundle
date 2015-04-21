@@ -102,3 +102,65 @@ services:
 
 When called, the `getForm()` method will use Symfony's form factory to create a new form of the specified type.
 Types passed to the `addFormType()` method can be either the form type alias string or a service implementing `Symfony\Component\Form\FormTypeInterface`
+
+### ContentTypeIdentifierMap
+
+The bundle includes a utility provider class to map form types to content types identifiers. You can use it for a type of content with a specific form.
+Content Type Identifiers can be read from the administration interface (in the _details_ tab
+of the content view) or you can explicitly set them when creating contentType using the public API.
+
+Define a new service using the `ContentTypeIdentifierMap` class and add a call to the `addFormType` method for each of your contents:
+
+```yaml
+# Acme/FormsBundle/Resources/config/services.yml
+
+services:
+  acme_forms.custom_map_form_provider:
+    class: %heliopsis_ezforms.form_provider.content_type_identifier_map.class%
+    arguments: [ @form.factory ]
+    calls:
+      - [ addFormType, [ 'article', 'acme_forms_feedback' ] ]
+      - [ addFormType, [ 'form', @acme_forms.newsletter_registration.type ] ]
+
+```
+
+When called, the `getForm()` method will use Symfony's form factory to create a new form of the specified type.
+Types passed to the `addFormType()` method can be either the form type alias string or a service implementing `Symfony\Component\Form\FormTypeInterface`
+
+### Chain
+
+The bundle includes a utility provider class to chain multiple form providers with priority options.
+You can use it if you have multiple kind of form with different type of matching.
+Form providers need to be set as a service like it usually done.
+
+Define a new service using the `Chain` class and add a call to the `addProvider` method for each of yours providers:
+
+```yaml
+# Acme/FormsBundle/Resources/config/services.yml
+
+services:
+  acme_forms.content_type_identifier_map_form_provider:
+    class: %heliopsis_ezforms.form_provider.content_type_identifier_map.class%
+    arguments: [ @form.factory ]
+    calls:
+      - [ addFormType, [ 'article', 'acme_forms_feedback' ] ]
+      - [ addFormType, [ 'form', @acme_forms.newsletter_registration.type ] ]
+      
+  acme_forms.content_remote_id_map_form_provider:
+    class: %heliopsis_ezforms.form_provider.content_remoteid_map.class%
+    arguments: [ @form.factory ]
+    calls:
+      - [ addFormType, [ 'FEEDBACK_FORM', 'acme_forms_feedback' ] ]
+      - [ addFormType, [ 'NEWSLETTER_REGISTRATION', @acme_forms.newsletter_registration.type ] ]
+      
+  acme_forms.custom_map_form_provider:
+    class: %heliopsis_ezforms.form_provider.chain.class%
+    calls:
+        # Default priority is 0
+      - [ addProvider, [ @acme_forms.content_type_identifier_map, 3 ] ]
+      - [ addProvider, [ @acme_forms.content_remote_id_map_form_provider ] ]
+
+```
+
+When called, the `getForm()` method will use Symfony's form factory to create a new form of the specified type.
+Services passed to the `addProvider()` method must implement `Heliopsis\eZFormsBundle\Provider\HandlerProviderInterface`

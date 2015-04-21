@@ -16,10 +16,10 @@ use Heliopsis\eZFormsBundle\FormHandler\NullHandler;
 use Heliopsis\eZFormsBundle\Provider\HandlerProviderInterface;
 
 /**
- * Class ContentTypeMap
+ * Class ContentTypeIdentifierMap
  * @package Heliopsis\eZFormsBundle\Provider\Handler
  */
-class ContentTypeMap implements HandlerProviderInterface
+class ContentTypeIdentifierMap implements HandlerProviderInterface
 {
     /**
      * @var FormHandlerInterface[]
@@ -59,9 +59,9 @@ class ContentTypeMap implements HandlerProviderInterface
         $locationContentTypeId = $location->contentInfo->contentTypeId;
 
         /** @var ContentType $locationContentType */
-        $locationContentType = $this->contentTypeService->loadContentType($locationContentTypeId);
+        $locationContentType = $this->contentTypeService->loadContentType( $locationContentTypeId );
 
-        return array_key_exists($locationContentType->identifier, $this->map) ?
+        return array_key_exists( $locationContentType->identifier, $this->map ) ?
             $this->map[$locationContentType->identifier] :
             new NullHandler();
     }

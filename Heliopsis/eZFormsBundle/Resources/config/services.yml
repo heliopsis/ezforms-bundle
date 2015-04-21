@@ -7,13 +7,13 @@ parameters:
   heliopsis_ezforms.handlers.null.class: Heliopsis\eZFormsBundle\FormHandler\NullHandler
 
   heliopsis_ezforms.form_provider.content_remoteid_map.class: Heliopsis\eZFormsBundle\Provider\Form\ContentRemoteIdMap
-  heliopsis_ezforms.form_provider.content_type_map.class: Heliopsis\eZFormsBundle\Provider\Form\ContentTypeMap
-  heliopsis_ezforms.form_provider.chain_map.class: Heliopsis\eZFormsBundle\Provider\Form\ChainMap
+  heliopsis_ezforms.form_provider.content_type_identifier_map.class: Heliopsis\eZFormsBundle\Provider\Form\ContentTypeIdentifierMap
+  heliopsis_ezforms.form_provider.chain.class: Heliopsis\eZFormsBundle\Provider\Form\Chain
 
   heliopsis_ezforms.handler_provider.single_handler.class: Heliopsis\eZFormsBundle\Provider\Handler\SingleHandlerProvider
   heliopsis_ezforms.handler_provider.content_remoteid_map.class: Heliopsis\eZFormsBundle\Provider\Handler\ContentRemoteIdMap
-  heliopsis_ezforms.handler_provider.content_type_map.class: Heliopsis\eZFormsBundle\Provider\Handler\ContentTypeMap
-  heliopsis_ezforms.handler_provider.chain_map.class: Heliopsis\eZFormsBundle\Provider\Handler\ChainMap
+  heliopsis_ezforms.handler_provider.content_type_identifier_map.class: Heliopsis\eZFormsBundle\Provider\Handler\ContentTypeIdentifierMap
+  heliopsis_ezforms.handler_provider.chain.class: Heliopsis\eZFormsBundle\Provider\Handler\Chain
 
   heliopsis_ezforms.response_provider.redirect_confirm.class: Heliopsis\eZFormsBundle\Provider\Response\RedirectToConfirmViewResponseProvider
   heliopsis_ezforms.response_provider.redirect_confirm.view_type: confirm
