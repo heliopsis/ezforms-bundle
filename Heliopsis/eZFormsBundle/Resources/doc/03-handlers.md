@@ -45,7 +45,7 @@ class DoctrinePersistenceHandler implements FormHandlerInterface
 
 This bundle does not provide any complete implementation but only a few utility classes and interfaces:
 
-### ChainHandler
+### MultiplexerHandler
 
 Use this class if you want to combine several handlers (i.e. store in DB and send an email to both user and administrator):
 
@@ -54,7 +54,7 @@ Use this class if you want to combine several handlers (i.e. store in DB and sen
 
 services:
   acme_forms.default_handler:
-  class: %heliopsis_ezforms.handlers.chain.class%
+  class: %heliopsis_ezforms.handlers.multiplexer.class%
   calls:
     - [ addHandler, [ @acme_forms.handlers.db ] ]
     - [ addHandler, [ @acme_forms.handlers.user_email ] ]

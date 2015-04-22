@@ -6,9 +6,9 @@
 
 namespace Heliopsis\eZFormsBundle\Tests\FormHandler;
 
-use Heliopsis\eZFormsBundle\FormHandler\ChainHandler;
+use Heliopsis\eZFormsBundle\FormHandler\MultiplexerHandler;
 
-class ChainHandlerTest extends \PHPUnit_Framework_TestCase
+class MultiplexerHandlerTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @var mixed
@@ -23,11 +23,11 @@ class ChainHandlerTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @param array $subHandlers
-     * @return ChainHandler
+     * @return MultiplexerHandler
      */
     private function getHandler( array $subHandlers = array() )
     {
-        return new ChainHandler( $subHandlers );
+        return new MultiplexerHandler( $subHandlers );
     }
 
     public function testHandle()
