@@ -66,6 +66,11 @@ class FormControllerTest extends \PHPUnit_Framework_TestCase
      */
     private $mockContentService;
 
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    private $mockSecurityContext;
+
     public function setUp()
     {
         $this->mockLocation = $this->getMock( 'eZ\\Publish\\API\\Repository\\Values\\Content\\Location' );
@@ -93,7 +98,16 @@ class FormControllerTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->controller = new FormController( $this->mockFacade, $this->mockViewManager, $this->mockContentService );
+        $this->mockSecurityContext = $this->getMockBuilder( 'Symfony\\Component\\Security\\Core\\SecurityContextInterface' )
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->controller = new FormController(
+            $this->mockFacade,
+            $this->mockContentService,
+            $this->mockViewManager,
+            $this->mockSecurityContext
+        );
     }
 
     private function setupContainer( $requestMethod = 'GET', $securityGranted = true )
