@@ -79,10 +79,19 @@ heliopsis_ezforms:
 
 ## Available Providers
 
+The bundle includes a few utility providers for basic usage :
+
+- [ContentRemoteIdMap](#ContentRemoteIdMap)
+- [ContentTypeIdentifierMap](#ContentTypeIdentifierMap)
+- [Chain](#Chain)
+
 ### ContentRemoteIdMap
 
-The bundle includes a utility provider class to map form types to content remote ids. You can use it for small websites
-with only a handful of custom forms. Content remote ids can be read from the administration interface (in the _details_ tab
+Maps _Content_ remote ids to form types.
+
+Useful for small websites with only a handful of custom forms.
+
+Content remote ids can be read from the administration interface (in the _details_ tab
 of the content view) or you can explicitly set them when creating content using the public API.
 
 Define a new service using the `ContentRemoteIdMap` class and add a call to the `addFormType` method for each of your contents:
@@ -105,11 +114,9 @@ Types passed to the `addFormType()` method can be either the form type alias str
 
 ### ContentTypeIdentifierMap
 
-The bundle includes a utility provider class to map form types to content types identifiers. You can use it for a type of content with a specific form.
-Content Type Identifiers can be read from the administration interface (in the _details_ tab
-of the content view) or you can explicitly set them when creating contentType using the public API.
+Maps _ContentType_ identifiers to form types.
 
-Define a new service using the `ContentTypeIdentifierMap` class and add a call to the `addFormType` method for each of your contents:
+Define a new service using the `ContentTypeIdentifierMap` class and add a call to the `addFormType` method for each of your content types:
 
 ```yaml
 # Acme/FormsBundle/Resources/config/services.yml
@@ -129,16 +136,19 @@ Types passed to the `addFormType()` method can be either the form type alias str
 
 ### Chain
 
-The bundle includes a utility provider class to chain multiple form providers with priority options.
-You can use it if you have multiple kind of form with different type of matching.
-Form providers need to be set as a service like it usually done.
+Combines multiple form providers with priority options. The first form to be actually returned by one of the children providers will be used.
 
-Define a new service using the `Chain` class and add a call to the `addProvider` method for each of yours providers:
+Use it if you have mutiple rules involving different kinds of matching (i.e. Try to match against a specific
+_Content_ remote id and fallback to your regular `ContentTypeIdentifierMap` provider.
+
+Define a new service using the `Chain` class and add a call to the `addProvider` method for each of yours providers
+with an optional `priority` parameter:
 
 ```yaml
 # Acme/FormsBundle/Resources/config/services.yml
 
 services:
+  # ContentTypeIdentifierMap from previous example
   acme_forms.content_type_identifier_map_form_provider:
     class: %heliopsis_ezforms.form_provider.content_type_identifier_map.class%
     arguments: [ @form.factory ]
@@ -146,21 +156,22 @@ services:
       - [ addFormType, [ 'article', 'acme_forms_feedback' ] ]
       - [ addFormType, [ 'form', @acme_forms.newsletter_registration.type ] ]
       
+  # ContentRemoteIdMap from previous example
   acme_forms.content_remote_id_map_form_provider:
     class: %heliopsis_ezforms.form_provider.content_remoteid_map.class%
     arguments: [ @form.factory ]
     calls:
       - [ addFormType, [ 'FEEDBACK_FORM', 'acme_forms_feedback' ] ]
       - [ addFormType, [ 'NEWSLETTER_REGISTRATION', @acme_forms.newsletter_registration.type ] ]
-      
+
+  # Combine those two providers giving higher priority to the ContentRemoteIdMap
   acme_forms.custom_map_form_provider:
     class: %heliopsis_ezforms.form_provider.chain.class%
     calls:
         # Default priority is 0
-      - [ addProvider, [ @acme_forms.content_type_identifier_map, 3 ] ]
-      - [ addProvider, [ @acme_forms.content_remote_id_map_form_provider ] ]
+      - [ addProvider, [ @acme_forms.content_type_identifier_map ] ]
+      - [ addProvider, [ @acme_forms.content_remote_id_map_form_provider, 3 ] ]
 
 ```
 
-When called, the `getForm()` method will use Symfony's form factory to create a new form of the specified type.
-Services passed to the `addProvider()` method must implement `Heliopsis\eZFormsBundle\Provider\HandlerProviderInterface`
+Services passed to the `addProvider` call must implement `Heliopsis\eZFormsBundle\Provider\FormProviderInterface`.
