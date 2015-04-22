@@ -1,7 +1,7 @@
 parameters:
   heliopsis_ezforms.controller.class: Heliopsis\eZFormsBundle\Controller\FormController
   heliopsis_ezforms.facade.default.class: Heliopsis\eZFormsBundle\FormFacade\DefaultFormFacade
-  heliopsis_ezforms.handlers.chain.class: Heliopsis\eZFormsBundle\FormHandler\ChainHandler
+  heliopsis_ezforms.handlers.multiplexer.class: Heliopsis\eZFormsBundle\FormHandler\MultiplexerHandler
   heliopsis_ezforms.handlers.null.class: Heliopsis\eZFormsBundle\FormHandler\NullHandler
   heliopsis_ezforms.form_provider.content_remoteid_map.class: Heliopsis\eZFormsBundle\Provider\Form\ContentRemoteIdMap
   heliopsis_ezforms.handler_provider.single_handler.class: Heliopsis\eZFormsBundle\Provider\Handler\SingleHandlerProvider
@@ -9,6 +9,9 @@ parameters:
   heliopsis_ezforms.response_provider.redirect_confirm.class: Heliopsis\eZFormsBundle\Provider\Response\RedirectToConfirmViewResponseProvider
 
   heliopsis_ezforms.response_provider.redirect_confirm.view_type: confirm
+
+  # Deprecated: use %heliopsis_ezforms.handlers.multiplexer.class% instead
+  heliopsis_ezforms.handlers.chain.class: %heliopsis_ezforms.handlers.multiplexer.class%
 
 services:
 
