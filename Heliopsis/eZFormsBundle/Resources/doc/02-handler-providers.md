@@ -70,6 +70,13 @@ heliopsis_ezforms:
 
 ## Available Providers
 
+The bundle includes a few utility providers for basic usage :
+
+- [SingleHandlerProvider](#SingleHandlerProvider)
+- [ContentRemoteIdMap](#ContentRemoteIdMap)
+- [ContentTypeIdentifierMap](#ContentTypeIdentifierMap)
+- [Chain](#Chain)
+
 ### SingleHandlerProvider
 
 For simple use cases where you use the same handler for all of your forms, a SingleHandlerProvider is available:
@@ -80,14 +87,13 @@ For simple use cases where you use the same handler for all of your forms, a Sin
 services:
   acme_forms.custom_handler_provider:
     class: %heliopsis_ezforms.handler_provider.single_handler.class%
-    arguments: [@acme_forms.handlers.logger, @ezpublish.api.service.content]
+    arguments: [@acme_forms.handlers.logger]
 
 ```
 
 ### ContentRemoteIdMap
 
-Similar to the [eponymous form provider](01-form-providers.md#contentremoteidmap),
-you may also map form handlers to content remote identifiers.
+Maps _Content_ remote ids to form handlers, similar to the [eponymous form provider](01-form-providers.md#contentremoteidmap).
 
 Define a new service using the `ContentRemoteIdMap` class and add a call to the `addFormType` method for each of your contents:
 
@@ -103,12 +109,11 @@ services:
       - [ addFormHandler, [ 'NEWSLETTER_REGISTRATION', @acme_forms.handlers.mailchimp_subscription ] ]
 ```
 
-Of course, services passed to the `addFormHandler()` method must implement `Heliopsis\eZFormsBundle\FormHandler\FormHandlerInterface`.
+Services passed to the `addFormHandler()` method must implement `Heliopsis\eZFormsBundle\FormHandler\FormHandlerInterface`.
 
 ### ContentTypeIdentifierMap
 
-Similar to the [eponymous form provider](01-form-providers.md#contenttypeindentifiermap),
-you may also map form handlers to content type identifiers.
+Maps _ContentType_ identifiers to form types, similar to the [eponymous form provider](01-form-providers.md#contenttypeindentifiermap).
 
 Define a new service using the `ContentTypeIdentifierMap` class and add a call to the `addFormType` method for each of your contents:
 
@@ -124,19 +129,24 @@ services:
       - [ addFormHandler, [ 'comments', @acme_forms.handlers.mailchimp_comments ] ]
 ```
 
-Of course, services passed to the `addFormHandler()` method must implement `Heliopsis\eZFormsBundle\FormHandler\FormHandlerInterface`.
+Services passed to the `addFormHandler()` method must implement `Heliopsis\eZFormsBundle\FormHandler\FormHandlerInterface`.
 
 ### Chain
 
-Similar to the [eponymous form provider](01-form-providers.md#chain),
-you may also chain multiple handler providers with priority.
+Combines multiple handler providers with priority options. The first handler to be actually returned by one of the children providers will be used.
+Similar to the [eponymous form provider](01-form-providers.md#chain)
 
-Define a new service using the `Chain` class and add a call to the `addProvider` method for each of your contents:
+Use it if you have mutiple rules involving different kinds of matching (i.e. Try to match against a specific
+_Content_ remote id and fallback to your regular `SingleHandlerProvider`.
+
+Define a new service using the `Chain` class and add a call to the `addProvider` method for each of your contents
+with an optional `priority` parameter:
 
 ```yaml
 # Acme/FormsBundle/Resources/config/services.yml
 
 services:
+  # ContentRemoteIdMap from previous example
   acme_forms.content_remote_id_handler_provider:
     class: %heliopsis_ezforms.handler_provider.content_remoteid_map.class%
     arguments: [ @ezpublish.api.service.content ]
@@ -144,20 +154,18 @@ services:
       - [ addFormHandler, [ 'FEEDBACK_FORM', @acme_forms.handlers.admin_email ] ]
       - [ addFormHandler, [ 'NEWSLETTER_REGISTRATION', @acme_forms.handlers.mailchimp_subscription ] ]
 
-  acme_forms.content_type_identifier_handler_provider:
-    class: %heliopsis_ezforms.handler_provider.content_type_identifier_map.class%
-    arguments: [ @ezpublish.api.service.content_type ]
-    calls:
-      - [ addFormHandler, [ 'article', @acme_forms.handlers.admin_email ] ]
-      - [ addFormHandler, [ 'comments', @acme_forms.handlers.mailchimp_comments ] ]
-      
+  # Default provider to at least log data
+  acme_forms.default_handler_provider:
+    class: %heliopsis_ezforms.handler_provider.single_handler.class%
+    arguments: [@acme_forms.handlers.logger]
+
+  # Combine those two providers giving higher priority to the ContentRemoteIdMap
   acme_forms.custom_map_handler_provider:
     class: %heliopsis_ezforms.handler_provider.chain.class%
-    arguments: [ @ezpublish.api.service.content_type ]
     calls:
         # Default priority is 0
-      - [ addProvider, [ @acme_forms.content_type_identifier_handler_provider ] ]
-      - [ addProvider, [ @acme_forms.content_type_identifier_handler_provider, 4 ] ]
+      - [ addProvider, [ @acme_forms.default_handler_provider ] ]
+      - [ addProvider, [ @acme_forms.content_remote_id_handler_provider, 4 ] ]
 ```
 
-Of course, services passed to the `addProvider()` method must implement `Heliopsis\eZFormsBundle\Provider\HandlerProviderInterface`.
+Services passed to the `addProvider()` method must implement `Heliopsis\eZFormsBundle\Provider\HandlerProviderInterface`.
