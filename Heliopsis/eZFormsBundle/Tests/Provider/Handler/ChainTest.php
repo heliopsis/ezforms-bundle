@@ -51,7 +51,7 @@ class ChainTest extends \PHPUnit_Framework_TestCase
         $this->nullHandler = $this->getMock( 'Heliopsis\\eZFormsBundle\\FormHandler\\NullHandler' );
     }
 
-    public function testGetFormChainedProvider()
+    public function testChainLogicWithoutPriority()
     {
         $this->initProviders();
 
@@ -127,7 +127,7 @@ class ChainTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-    public function testGetFormChainedPriorisedProvider()
+    public function testChainLogicWithPriority()
     {
         $this->initProviders();
 
@@ -179,8 +179,8 @@ class ChainTest extends \PHPUnit_Framework_TestCase
         $chainProvider = new Chain();
 
         $chainProvider->addProvider( $this->mockProviders[0], 2 );
-        $chainProvider->addProvider( $this->mockProviders[1], 1 );
-        $chainProvider->addProvider( $this->mockProviders[2], 3 );
+        $chainProvider->addProvider( $this->mockProviders[1], 3 );
+        $chainProvider->addProvider( $this->mockProviders[2], 1 );
 
         $this->assertSame(
             $this->mockHandlers[0],

@@ -40,7 +40,7 @@ class Chain implements HandlerProviderInterface
             $this->providers[$priority][] = $handlerProvider;
         }
 
-        ksort( $this->providers );
+        krsort( $this->providers );
     }
 
     /**

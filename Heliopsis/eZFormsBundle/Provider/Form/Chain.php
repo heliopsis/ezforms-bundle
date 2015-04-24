@@ -39,7 +39,7 @@ class Chain implements FormProviderInterface
             $this->providers[$priority][] = $formProvider;
         }
 
-        ksort( $this->providers );
+        krsort( $this->providers );
     }
 
     /**

@@ -42,7 +42,7 @@ class ChainTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-    public function testGetFormChainedProvider()
+    public function testChainLogicWithoutPriority()
     {
         $this->initProviders();
 
@@ -98,7 +98,7 @@ class ChainTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-    public function testGetFormChainedPriorisedProvider()
+    public function testChainLogicWithPriority()
     {
         $this->initProviders();
 
@@ -135,8 +135,8 @@ class ChainTest extends \PHPUnit_Framework_TestCase
         $chainProvider = new Chain();
 
         $chainProvider->addProvider( $this->mockProviders[0], 2 );
-        $chainProvider->addProvider( $this->mockProviders[1], 1 );
-        $chainProvider->addProvider( $this->mockProviders[2], 3 );
+        $chainProvider->addProvider( $this->mockProviders[1], 3 );
+        $chainProvider->addProvider( $this->mockProviders[2], 1 );
 
         $this->assertSame(
             $this->mockForms[0],
@@ -154,9 +154,26 @@ class ChainTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-    public function testNotFindFormExecption()
+    public function testEmptyChainException()
     {
         $chainProvider = new Chain();
+
+        $this->setExpectedException( 'Heliopsis\eZFormsBundle\Exceptions\UnknownFormException' );
+        $chainProvider->getForm( $this->locations[0] );
+    }
+
+    public function testNotFindFormException()
+    {
+        $chainProvider = new Chain();
+
+        $this->initProviders();
+
+        $chainProvider->addProvider( $this->mockProviders[0] );
+
+        $this->mockProviders[0]->expects( $this->at( 0 ) )
+            ->method( 'getForm' )
+            ->with( $this->locations[1] )
+            ->will( $this->throwException( $this->getMock( 'Heliopsis\\eZFormsBundle\\Exceptions\\UnknownFormException' ) ) );
 
         $this->setExpectedException( 'Heliopsis\eZFormsBundle\Exceptions\UnknownFormException' );
         $chainProvider->getForm( $this->locations[0] );
