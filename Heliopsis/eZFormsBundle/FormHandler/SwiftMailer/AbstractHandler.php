@@ -157,7 +157,7 @@ abstract class AbstractHandler implements FormHandlerInterface
 
         if ( $message = $this->createMessage() )
         {
-            $this->getMailer()->send($message);
+            $this->getMailer()->send( $message );
         }
     }
 
