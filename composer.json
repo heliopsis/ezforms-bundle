@@ -1,7 +1,7 @@
 {
     "name": "heliopsis/ezforms-bundle",
     "description": "Symfony forms handling within eZPublish contents",
-    "version": "1.2.0",
+    "version": "2.0.0",
     "type": "symfony-bundle",
     "keywords": [ "ezpublish", "forms" ],
     "authors": [
