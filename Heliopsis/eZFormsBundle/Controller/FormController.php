@@ -46,7 +46,7 @@ class FormController extends Controller
 
         $request = $this->getRequest();
         $location = $this->getLocationService()->loadLocation( $locationId );
-        $form = $this->getFormFacade()->getForm( $location );
+        $form = $this->getFormFacade()->getForm( $location, $viewType );
 
         if ( 'POST' === $request->getMethod() )
         {
@@ -54,10 +54,10 @@ class FormController extends Controller
             if ( $form->isValid() )
             {
                 $data = $form->getData();
-                $handler = $this->getHandler( $location );
+                $handler = $this->getHandler( $location, $viewType );
                 $handler->handle( $data );
 
-                return $this->getFormFacade()->getResponse( $location, $data );
+                return $this->getFormFacade()->getResponse( $location, $viewType, $data );
             }
         }
 
@@ -80,11 +80,12 @@ class FormController extends Controller
 
     /**
      * @param \eZ\Publish\API\Repository\Values\Content\Location $location
+     * @param string $viewType
      * @return \Heliopsis\eZFormsBundle\FormHandler\FormHandlerInterface
      */
-    private function getHandler( Location $location )
+    private function getHandler( Location $location, $viewType )
     {
-        $handler = $this->getFormFacade()->getHandler( $location );
+        $handler = $this->getFormFacade()->getHandler( $location, $viewType );
         if ( $handler instanceof LocationAwareHandlerInterface )
         {
             $handler->setLocation( $location );

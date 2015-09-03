@@ -21,17 +21,17 @@ class ContentRemoteIdMapTest extends \PHPUnit_Framework_TestCase
 
         $this->assertSame(
             $mockHandler1,
-            $provider->getHandler( $this->getMockLocation( 'remoteId1' ) )
+            $provider->getHandler( $this->getMockLocation( 'remoteId1' ), 'viewType' )
         );
 
         $this->assertSame(
             $mockHandler2,
-            $provider->getHandler( $this->getMockLocation( 'remoteId2' ) )
+            $provider->getHandler( $this->getMockLocation( 'remoteId2' ), 'viewType' )
         );
 
         $this->assertInstanceOf(
             'Heliopsis\\eZFormsBundle\\FormHandler\\NullHandler',
-            $provider->getHandler( $this->getMockLocation( 'notMapped' ) )
+            $provider->getHandler( $this->getMockLocation( 'notMapped' ), 'viewType' )
         );
     }
 

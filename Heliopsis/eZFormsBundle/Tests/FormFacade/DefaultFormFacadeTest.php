@@ -74,26 +74,26 @@ class DefaultFormFacadeTest extends \PHPUnit_Framework_TestCase
 
         $this->mockFormProvider->expects( $this->once() )
             ->method( 'getForm' )
-            ->with( $this->identicalTo( $this->mockLocation ) )
+            ->with( $this->identicalTo( $this->mockLocation ), 'viewType' )
             ->will( $this->returnValue( $this->mockForm ) );
 
-        $form = $facade->getForm( $this->mockLocation );
+        $form = $facade->getForm( $this->mockLocation, 'viewType' );
         $this->assertEquals( $this->mockForm, $form );
 
         $this->mockHandlerProvider->expects( $this->once() )
             ->method( 'getHandler' )
-            ->with( $this->identicalTo( $this->mockLocation ) )
+            ->with( $this->identicalTo( $this->mockLocation ), 'viewType' )
             ->will( $this->returnValue( $this->mockHandler ) );
 
-        $handler = $facade->getHandler( $this->mockLocation );
+        $handler = $facade->getHandler( $this->mockLocation, 'viewType' );
         $this->assertEquals( $this->mockHandler, $handler );
 
         $this->mockResponseProvider->expects( $this->once() )
             ->method( 'getResponse' )
-            ->with( $this->identicalTo( $this->mockLocation ), $this->identicalTo( $this->mockData ) )
+            ->with( $this->identicalTo( $this->mockLocation ), 'viewType', $this->identicalTo( $this->mockData ) )
             ->will( $this->returnValue( $this->mockResponse ) );
 
-        $response = $facade->getResponse( $this->mockLocation, $this->mockData );
+        $response = $facade->getResponse( $this->mockLocation, 'viewType', $this->mockData );
         $this->assertEquals( $response, $this->mockResponse );
     }
 
@@ -101,20 +101,20 @@ class DefaultFormFacadeTest extends \PHPUnit_Framework_TestCase
     {
         $handler = new DefaultFormFacade();
         $this->setExpectedException( 'Heliopsis\\eZFormsBundle\\Exceptions\\UnknownFormException' );
-        $handler->getForm( $this->mockLocation );
+        $handler->getForm( $this->mockLocation, 'viewType' );
     }
 
     public function testDefaultHandlerProvider()
     {
         $handler = new DefaultFormFacade();
-        $this->assertInstanceOf( 'Heliopsis\\eZFormsBundle\\FormHandler\\NullHandler', $handler->getHandler( $this->mockLocation ) );
+        $this->assertInstanceOf( 'Heliopsis\\eZFormsBundle\\FormHandler\\NullHandler', $handler->getHandler( $this->mockLocation, 'viewType' ) );
     }
 
     public function testDefaultResponseProvider()
     {
         $handler = new DefaultFormFacade();
         $this->setExpectedException( 'Heliopsis\\eZFormsBundle\\Exceptions\\BadConfigurationException' );
-        $handler->getResponse( $this->mockLocation, $this->mockData );
+        $handler->getResponse( $this->mockLocation, 'viewType', $this->mockData );
     }
 
     public function testSetFormProvider()
@@ -124,10 +124,10 @@ class DefaultFormFacadeTest extends \PHPUnit_Framework_TestCase
 
         $this->mockFormProvider->expects( $this->once() )
             ->method( 'getForm' )
-            ->with( $this->identicalTo( $this->mockLocation ) )
+            ->with( $this->identicalTo( $this->mockLocation ), 'viewType' )
             ->will( $this->returnValue( $this->mockForm ) );
 
-        $form = $facade->getForm( $this->mockLocation );
+        $form = $facade->getForm( $this->mockLocation, 'viewType' );
         $this->assertEquals( $this->mockForm, $form );
     }
 
@@ -138,10 +138,10 @@ class DefaultFormFacadeTest extends \PHPUnit_Framework_TestCase
 
         $this->mockHandlerProvider->expects( $this->once() )
             ->method( 'getHandler' )
-            ->with( $this->identicalTo( $this->mockLocation ) )
+            ->with( $this->identicalTo( $this->mockLocation ), 'viewType' )
             ->will( $this->returnValue( $this->mockHandler ) );
 
-        $handler = $facade->getHandler( $this->mockLocation );
+        $handler = $facade->getHandler( $this->mockLocation, 'viewType' );
         $this->assertEquals( $this->mockHandler, $handler );
     }
 
@@ -151,10 +151,10 @@ class DefaultFormFacadeTest extends \PHPUnit_Framework_TestCase
         $facade->setResponseProvider( $this->mockResponseProvider );
         $this->mockResponseProvider->expects( $this->once() )
             ->method( 'getResponse' )
-            ->with( $this->identicalTo( $this->mockLocation ), $this->identicalTo( $this->mockData ) )
+            ->with( $this->identicalTo( $this->mockLocation ), 'viewType', $this->identicalTo( $this->mockData ) )
             ->will( $this->returnValue( $this->mockResponse ) );
 
-        $response = $facade->getResponse( $this->mockLocation, $this->mockData );
+        $response = $facade->getResponse( $this->mockLocation, 'viewType', $this->mockData );
         $this->assertEquals( $response, $this->mockResponse );
     }
 }

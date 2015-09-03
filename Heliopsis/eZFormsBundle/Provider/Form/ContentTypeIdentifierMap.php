@@ -59,9 +59,10 @@ class ContentTypeIdentifierMap implements FormProviderInterface
     /**
      * @param Location $location
      * @return \Symfony\Component\Form\FormInterface
+     * @param string $viewType
      * @throws \Heliopsis\eZFormsBundle\Exceptions\UnknownFormException
      */
-    public function getForm( Location $location )
+    public function getForm( Location $location, $viewType )
     {
         $locationContentTypeId = $location->contentInfo->contentTypeId;
 

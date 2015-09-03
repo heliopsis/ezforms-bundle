@@ -36,10 +36,11 @@ class RedirectToConfirmViewResponseProvider implements ResponseProviderInterface
 
     /**
      * @param \eZ\Publish\API\Repository\Values\Content\Location $location
+     * @param string $viewType
      * @param mixed $data
      * @return Response
      */
-    public function getResponse( Location $location, $data )
+    public function getResponse( Location $location, $viewType, $data )
     {
         return new RedirectResponse(
             $this->urlGenerator->generate(

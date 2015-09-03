@@ -57,7 +57,7 @@ class ChainTest extends \PHPUnit_Framework_TestCase
 
         $this->mockProviders[0]->expects( $this->at( 0 ) )
             ->method( 'getHandler' )
-            ->with( $this->locations[0] )
+            ->with( $this->locations[0], 'viewType' )
             ->will( $this->returnValue( $this->mockHandlers[0] ) );
 
         $this->mockProviders[0]->expects( $this->at( 1 ) )
@@ -67,37 +67,37 @@ class ChainTest extends \PHPUnit_Framework_TestCase
 
         $this->mockProviders[0]->expects( $this->at( 2 ) )
             ->method( 'getHandler' )
-            ->with( $this->locations[2] )
+            ->with( $this->locations[2], 'viewType' )
             ->will( $this->returnValue( $this->nullHandler ) );
 
         $this->mockProviders[0]->expects( $this->at( 3 ) )
             ->method( 'getHandler' )
-            ->with( $this->locations[3] )
+            ->with( $this->locations[3], 'viewType' )
             ->will( $this->returnValue( $this->nullHandler ) );
 
         $this->mockProviders[1]->expects( $this->at( 0 ) )
             ->method( 'getHandler' )
-            ->with( $this->locations[1] )
+            ->with( $this->locations[1], 'viewType' )
             ->will( $this->returnValue( $this->mockHandlers[1] ) );
 
         $this->mockProviders[1]->expects( $this->at( 1 ) )
             ->method( 'getHandler' )
-            ->with( $this->locations[2] )
+            ->with( $this->locations[2], 'viewType' )
             ->will( $this->returnValue( $this->nullHandler ) );
 
         $this->mockProviders[1]->expects( $this->at( 2 ) )
             ->method( 'getHandler' )
-            ->with( $this->locations[3] )
+            ->with( $this->locations[3], 'viewType' )
             ->will( $this->returnValue( $this->nullHandler ) );
 
         $this->mockProviders[2]->expects( $this->at( 0 ) )
             ->method( 'getHandler' )
-            ->with( $this->locations[2] )
+            ->with( $this->locations[2], 'viewType' )
             ->will( $this->returnValue( $this->mockHandlers[2] ) );
 
         $this->mockProviders[2]->expects( $this->at( 1 ) )
             ->method( 'getHandler' )
-            ->with( $this->locations[3] )
+            ->with( $this->locations[3], 'viewType' )
             ->will( $this->returnValue( $this->nullHandler ) );
 
         $chainProvider = new Chain();
@@ -108,22 +108,22 @@ class ChainTest extends \PHPUnit_Framework_TestCase
 
         $this->assertSame(
             $this->mockHandlers[0],
-            $chainProvider->getHandler( $this->locations[0] )
+            $chainProvider->getHandler( $this->locations[0], 'viewType' )
         );
 
         $this->assertSame(
             $this->mockHandlers[1],
-            $chainProvider->getHandler( $this->locations[1] )
+            $chainProvider->getHandler( $this->locations[1], 'viewType' )
         );
 
         $this->assertSame(
             $this->mockHandlers[2],
-            $chainProvider->getHandler( $this->locations[2] )
+            $chainProvider->getHandler( $this->locations[2], 'viewType' )
         );
 
         $this->assertInstanceOf(
             'Heliopsis\\eZFormsBundle\\FormHandler\\NullHandler',
-            $chainProvider->getHandler(  $this->locations[3] )
+            $chainProvider->getHandler(  $this->locations[3], 'viewType' )
         );
     }
 
@@ -133,47 +133,47 @@ class ChainTest extends \PHPUnit_Framework_TestCase
 
         $this->mockProviders[1]->expects( $this->at( 0 ) )
             ->method( 'getHandler' )
-            ->with( $this->locations[0] )
+            ->with( $this->locations[0], 'viewType' )
             ->will( $this->returnValue( $this->mockHandlers[0] ) );
 
         $this->mockProviders[1]->expects( $this->at( 1 ) )
             ->method( 'getHandler' )
-            ->with( $this->locations[1] )
+            ->with( $this->locations[1], 'viewType' )
             ->will( $this->returnValue( $this->nullHandler ) );
 
         $this->mockProviders[1]->expects( $this->at( 2 ) )
             ->method( 'getHandler' )
-            ->with( $this->locations[2] )
+            ->with( $this->locations[2], 'viewType' )
             ->will( $this->returnValue( $this->nullHandler ) );
 
         $this->mockProviders[1]->expects( $this->at( 3 ) )
             ->method( 'getHandler' )
-            ->with( $this->locations[3] )
+            ->with( $this->locations[3], 'viewType' )
             ->will( $this->returnValue( $this->nullHandler ) );
 
         $this->mockProviders[0]->expects( $this->at( 0 ) )
             ->method( 'getHandler' )
-            ->with( $this->locations[1] )
+            ->with( $this->locations[1], 'viewType' )
             ->will( $this->returnValue( $this->mockHandlers[1] ) );
 
         $this->mockProviders[0]->expects( $this->at( 1 ) )
             ->method( 'getHandler' )
-            ->with( $this->locations[2] )
+            ->with( $this->locations[2], 'viewType' )
             ->will( $this->returnValue( $this->nullHandler ) );
 
         $this->mockProviders[0]->expects( $this->at( 2 ) )
             ->method( 'getHandler' )
-            ->with( $this->locations[3] )
+            ->with( $this->locations[3], 'viewType' )
             ->will( $this->returnValue( $this->nullHandler ) );
 
         $this->mockProviders[2]->expects( $this->at( 0 ) )
             ->method( 'getHandler' )
-            ->with( $this->locations[2] )
+            ->with( $this->locations[2], 'viewType' )
             ->will( $this->returnValue( $this->mockHandlers[2] ) );
 
         $this->mockProviders[2]->expects( $this->at( 1 ) )
             ->method( 'getHandler' )
-            ->with( $this->locations[3] )
+            ->with( $this->locations[3], 'viewType' )
             ->will( $this->returnValue( $this->nullHandler ) );
 
         $chainProvider = new Chain();
@@ -184,22 +184,22 @@ class ChainTest extends \PHPUnit_Framework_TestCase
 
         $this->assertSame(
             $this->mockHandlers[0],
-            $chainProvider->getHandler( $this->locations[0] )
+            $chainProvider->getHandler( $this->locations[0], 'viewType' )
         );
 
         $this->assertSame(
             $this->mockHandlers[1],
-            $chainProvider->getHandler( $this->locations[1] )
+            $chainProvider->getHandler( $this->locations[1], 'viewType' )
         );
 
         $this->assertSame(
             $this->mockHandlers[2],
-            $chainProvider->getHandler( $this->locations[2] )
+            $chainProvider->getHandler( $this->locations[2], 'viewType' )
         );
 
         $this->assertInstanceOf(
             'Heliopsis\\eZFormsBundle\\FormHandler\\NullHandler',
-            $chainProvider->getHandler(  $this->locations[3] )
+            $chainProvider->getHandler(  $this->locations[3], 'viewType' )
         );
     }
 

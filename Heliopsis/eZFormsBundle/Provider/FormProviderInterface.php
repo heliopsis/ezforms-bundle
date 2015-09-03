@@ -15,8 +15,9 @@ interface FormProviderInterface
     /**
      * Returns symfony form to display at $location
      * @param \eZ\Publish\API\Repository\Values\Content\Location $location
+     * @param string $viewType
      * @return \Symfony\Component\Form\FormInterface
      * @throws \Heliopsis\eZFormsBundle\Exceptions\UnknownFormException if no form matches $location
      */
-    public function getForm( Location $location );
+    public function getForm( Location $location, $viewType );
 }

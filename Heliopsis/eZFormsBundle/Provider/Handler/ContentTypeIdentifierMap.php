@@ -52,9 +52,10 @@ class ContentTypeIdentifierMap implements HandlerProviderInterface
      * Returns form handler to use at $location
      *
      * @param \eZ\Publish\API\Repository\Values\Content\Location $location
+     * @param string $viewType
      * @return \Heliopsis\eZFormsBundle\FormHandler\FormHandlerInterface
      */
-    public function getHandler( Location $location )
+    public function getHandler( Location $location, $viewType )
     {
         $locationContentTypeId = $location->contentInfo->contentTypeId;
 

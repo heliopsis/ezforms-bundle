@@ -44,10 +44,11 @@ class Chain implements FormProviderInterface
 
     /**
      * @param Location $location
+     * @param string $viewType
      * @return \Symfony\Component\Form\FormInterface
      * @throws \Heliopsis\eZFormsBundle\Exceptions\UnknownFormException
      */
-    public function getForm( Location $location )
+    public function getForm( Location $location, $viewType )
     {
         foreach ( $this->providers as $providersPriority )
         {

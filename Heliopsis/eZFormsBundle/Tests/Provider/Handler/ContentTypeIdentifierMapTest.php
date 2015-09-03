@@ -40,12 +40,12 @@ class ContentTypeIdentifierMapTest extends \PHPUnit_Framework_TestCase
 
         $this->assertSame(
             $mockHandlers[0],
-            $provider->getHandler( $this->getMockLocation( 0 ) )
+            $provider->getHandler( $this->getMockLocation( 0 ), 'viewType' )
         );
 
         $this->assertSame(
             $mockHandlers[1],
-            $provider->getHandler( $this->getMockLocation( 1 ) )
+            $provider->getHandler( $this->getMockLocation( 1 ), 'viewType' )
         );
     }
 
@@ -59,7 +59,7 @@ class ContentTypeIdentifierMapTest extends \PHPUnit_Framework_TestCase
 
         $this->assertInstanceOf(
             'Heliopsis\\eZFormsBundle\\FormHandler\\NullHandler',
-            $provider->getHandler( $this->getMockLocation( 0 ) )
+            $provider->getHandler( $this->getMockLocation( 0 ), 'viewType' )
         );
     }
 

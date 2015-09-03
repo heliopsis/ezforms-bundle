@@ -55,12 +55,12 @@ class ContentTypeIdentifierMapTest extends \PHPUnit_Framework_TestCase
 
         $this->assertSame(
             $mockForms[0],
-            $provider->getForm( $this->getMockLocation( 0 ) )
+            $provider->getForm( $this->getMockLocation( 0 ), 'viewType' )
         );
 
         $this->assertSame(
             $mockForms[1],
-            $provider->getForm( $this->getMockLocation( 1 ) )
+            $provider->getForm( $this->getMockLocation( 1 ), 'viewType' )
         );
     }
 
@@ -73,7 +73,7 @@ class ContentTypeIdentifierMapTest extends \PHPUnit_Framework_TestCase
         $provider = $this->getContentTypeIdentifierMap();
 
         $this->setExpectedException( 'Heliopsis\eZFormsBundle\Exceptions\UnknownFormException' );
-        $provider->getForm( $this->getMockLocation( 0 ) );
+        $provider->getForm( $this->getMockLocation( 0 ), 'viewType' );
     }
 
     private function getMockLocation( $contentTypeID )

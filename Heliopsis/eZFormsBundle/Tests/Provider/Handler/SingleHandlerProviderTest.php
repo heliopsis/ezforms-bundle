@@ -16,6 +16,6 @@ class SingleHandlerProviderTest extends \PHPUnit_Framework_TestCase
         $mockHandler = $this->getMock( 'Heliopsis\\eZFormsBundle\\FormHandler\\FormHandlerInterface' );
         $mockLocation = $this->getMock( 'eZ\\Publish\\API\\Repository\\Values\\Content\\Location' );
         $provider = new SingleHandlerProvider( $mockHandler );
-        $this->assertEquals( $mockHandler, $provider->getHandler( $mockLocation ) );
+        $this->assertEquals( $mockHandler, $provider->getHandler( $mockLocation, 'viewType' ) );
     }
 }

@@ -52,19 +52,19 @@ class ContentRemoteIdMapTest extends \PHPUnit_Framework_TestCase
 
         $this->assertSame(
             $mockForm1,
-            $this->provider->getForm( $this->getMockLocation( 'remoteId1' ) )
+            $this->provider->getForm( $this->getMockLocation( 'remoteId1' ), 'viewType' )
         );
 
         $this->assertSame(
             $mockForm2,
-            $this->provider->getForm( $this->getMockLocation( 'remoteId2' ) )
+            $this->provider->getForm( $this->getMockLocation( 'remoteId2' ), 'viewType' )
         );
     }
 
     public function testGetFormThrowsException()
     {
         $this->setExpectedException( 'Heliopsis\eZFormsBundle\Exceptions\UnknownFormException' );
-        $this->provider->getForm( $this->getMockLocation( 'notMapped' ) );
+        $this->provider->getForm( $this->getMockLocation( 'notMapped' ), 'viewType' );
     }
 
     private function getMockLocation( $contentRemoteId )

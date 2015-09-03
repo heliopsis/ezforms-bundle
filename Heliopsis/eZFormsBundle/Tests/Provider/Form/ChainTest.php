@@ -84,17 +84,17 @@ class ChainTest extends \PHPUnit_Framework_TestCase
 
         $this->assertSame(
             $this->mockForms[0],
-            $chainProvider->getForm( $this->locations[0] )
+            $chainProvider->getForm( $this->locations[0], 'viewType' )
         );
 
         $this->assertSame(
             $this->mockForms[1],
-            $chainProvider->getForm( $this->locations[1] )
+            $chainProvider->getForm( $this->locations[1], 'viewType' )
         );
 
         $this->assertSame(
             $this->mockForms[2],
-            $chainProvider->getForm( $this->locations[2] )
+            $chainProvider->getForm( $this->locations[2], 'viewType' )
         );
     }
 
@@ -104,32 +104,32 @@ class ChainTest extends \PHPUnit_Framework_TestCase
 
         $this->mockProviders[1]->expects( $this->at( 0 ) )
             ->method( 'getForm' )
-            ->with( $this->locations[0] )
+            ->with( $this->locations[0], 'viewType' )
             ->will( $this->returnValue( $this->mockForms[0] ) );
 
         $this->mockProviders[1]->expects( $this->at( 1 ) )
             ->method( 'getForm' )
-            ->with( $this->locations[1] )
+            ->with( $this->locations[1], 'viewType' )
             ->will( $this->throwException( $this->getMock( 'Heliopsis\\eZFormsBundle\\Exceptions\\UnknownFormException' ) ) );
 
         $this->mockProviders[1]->expects( $this->at( 2 ) )
             ->method( 'getForm' )
-            ->with( $this->locations[2] )
+            ->with( $this->locations[2], 'viewType' )
             ->will( $this->throwException( $this->getMock( 'Heliopsis\\eZFormsBundle\\Exceptions\\UnknownFormException' ) ) );
 
         $this->mockProviders[0]->expects( $this->at( 0 ) )
             ->method( 'getForm' )
-            ->with( $this->locations[1] )
+            ->with( $this->locations[1], 'viewType' )
             ->will( $this->returnValue( $this->mockForms[1] ) );
 
         $this->mockProviders[0]->expects( $this->at( 1 ) )
             ->method( 'getForm' )
-            ->with( $this->locations[2] )
+            ->with( $this->locations[2], 'viewType' )
             ->will( $this->throwException( $this->getMock( 'Heliopsis\\eZFormsBundle\\Exceptions\\UnknownFormException' ) ) );
 
         $this->mockProviders[2]->expects( $this->at( 0 ) )
             ->method( 'getForm' )
-            ->with( $this->locations[2] )
+            ->with( $this->locations[2], 'viewType' )
             ->will( $this->returnValue( $this->mockForms[2] ) );
 
         $chainProvider = new Chain();
@@ -140,17 +140,17 @@ class ChainTest extends \PHPUnit_Framework_TestCase
 
         $this->assertSame(
             $this->mockForms[0],
-            $chainProvider->getForm( $this->locations[0] )
+            $chainProvider->getForm( $this->locations[0], 'viewType' )
         );
 
         $this->assertSame(
             $this->mockForms[1],
-            $chainProvider->getForm( $this->locations[1] )
+            $chainProvider->getForm( $this->locations[1], 'viewType' )
         );
 
         $this->assertSame(
             $this->mockForms[2],
-            $chainProvider->getForm( $this->locations[2] )
+            $chainProvider->getForm( $this->locations[2], 'viewType' )
         );
     }
 
@@ -159,7 +159,7 @@ class ChainTest extends \PHPUnit_Framework_TestCase
         $chainProvider = new Chain();
 
         $this->setExpectedException( 'Heliopsis\eZFormsBundle\Exceptions\UnknownFormException' );
-        $chainProvider->getForm( $this->locations[0] );
+        $chainProvider->getForm( $this->locations[0], 'viewType' );
     }
 
     public function testNotFindFormException()
@@ -176,7 +176,7 @@ class ChainTest extends \PHPUnit_Framework_TestCase
             ->will( $this->throwException( $this->getMock( 'Heliopsis\\eZFormsBundle\\Exceptions\\UnknownFormException' ) ) );
 
         $this->setExpectedException( 'Heliopsis\eZFormsBundle\Exceptions\UnknownFormException' );
-        $chainProvider->getForm( $this->locations[0] );
+        $chainProvider->getForm( $this->locations[0], 'viewType' );
     }
 
     private function initProviders()

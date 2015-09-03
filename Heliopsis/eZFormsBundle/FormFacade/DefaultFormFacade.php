@@ -75,49 +75,52 @@ class DefaultFormFacade implements FormFacadeInterface
     /**
      * Returns symfony form to display at $location
      * @param \eZ\Publish\API\Repository\Values\Content\Location $location
+     * @param string $viewType
      * @return \Symfony\Component\Form\FormInterface
      * @throws \Heliopsis\eZFormsBundle\Exceptions\UnknownFormException if no form matches $location
      */
-    public function getForm(Location $location)
+    public function getForm(Location $location, $viewType)
     {
         if ( null === $this->formProvider )
         {
             throw new UnknownFormException();
         }
 
-        return $this->formProvider->getForm( $location );
+        return $this->formProvider->getForm( $location, $viewType );
     }
 
     /**
      * Returns form handler to use at $location
      * @param \eZ\Publish\API\Repository\Values\Content\Location $location
+     * @param string $viewType
      * @return \Heliopsis\eZFormsBundle\FormHandler\FormHandlerInterface
      */
-    public function getHandler(Location $location)
+    public function getHandler(Location $location, $viewType)
     {
         if ( null === $this->handlerProvider )
         {
             return new NullHandler();
         }
 
-        return $this->handlerProvider->getHandler( $location );
+        return $this->handlerProvider->getHandler( $location, $viewType );
     }
 
     /**
      * Creates HTTP Response to be returned by controller
      * @param \eZ\Publish\API\Repository\Values\Content\Location $location
+     * @param string $viewType
      * @param mixed $data
      * @return \Symfony\Component\HttpFoundation\Response
      * @throws \Heliopsis\eZFormsBundle\Exceptions\BadConfigurationException
      */
-    public function getResponse(Location $location, $data)
+    public function getResponse(Location $location, $viewType, $data)
     {
         if ( null === $this->responseProvider )
         {
             throw new BadConfigurationException( "No Response Provider set in default FormFacade" );
         }
 
-        return $this->responseProvider->getResponse( $location, $data );
+        return $this->responseProvider->getResponse( $location, $viewType, $data );
     }
 
 }

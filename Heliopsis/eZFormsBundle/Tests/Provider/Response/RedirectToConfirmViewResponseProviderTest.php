@@ -49,7 +49,7 @@ class RedirectToConfirmViewResponseProviderTest extends \PHPUnit_Framework_TestC
                 $this->returnValue( '/mock/url' )
             );
 
-        $response = $this->provider->getResponse( $location, null );
+        $response = $this->provider->getResponse( $location, 'viewType', null );
         $this->assertInstanceOf( 'Symfony\\Component\\HttpFoundation\\RedirectResponse', $response );
         $this->assertEquals( '/mock/url', $response->headers->get( 'location' ) );
     }
