@@ -39,6 +39,7 @@ services:
     class: %heliopsis_ezforms.controller.class%
     calls:
       - [ 'setContainer', [ @service_container ] ]
+      - [ 'setFormFacade', [ @heliopsis_ezforms.facade ] ]
 
   heliopsis_ezforms.facade.default:
     class: %heliopsis_ezforms.facade.default.class%

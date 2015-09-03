@@ -18,6 +18,11 @@ use Exception;
 class FormController extends Controller
 {
     /**
+     * @var FormFacadeInterface
+     */
+    private $formFacade;
+
+    /**
      * Main action for viewing content through a location in the repository.
      * Response will be cached with HttpCache validation model (Etag)
      *
@@ -114,6 +119,15 @@ class FormController extends Controller
      */
     private function getFormFacade()
     {
-        return $this->container->get( 'heliopsis_ezforms.facade' );
+        return $this->formFacade;
+    }
+
+    /**
+     * @param \Heliopsis\eZFormsBundle\FormFacade\FormFacadeInterface $formFacade
+     * @return void
+     */
+    public function setFormFacade( FormFacadeInterface $formFacade )
+    {
+        $this->formFacade = $formFacade;
     }
 }
