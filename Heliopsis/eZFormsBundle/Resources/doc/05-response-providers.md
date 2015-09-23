@@ -1,6 +1,6 @@
 # Response providers
 
-Response providers are in charge of generating an HttpResponse object when the form has sucessfully been submitted and handled.
+Response providers are in charge of generating an HttpResponse object when the form has successfully been submitted and handled.
 Default behaviour is to redirect to a confirm view of current location.
 
 If you want to go beyond simple one-off forms and say chain multiple forms to create some kind of funnel,

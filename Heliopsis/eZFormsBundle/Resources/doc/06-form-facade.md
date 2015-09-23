@@ -4,7 +4,7 @@ The `FormFacadeInterface` aggregates the 3 providers interfaces (`FormProviderIn
 and `ResponseProviderInterface`). Default implementation merely aggregates 3 independant services, but it is through the
 facade that the controller interacts with those services.
 
-What that means is thatif you've got yourself in a situation where you need to closely couple form generation,
+What that means is that if you've got yourself in a situation where you need to closely couple form generation,
 data handling and / or funnel logic, this can be achieved with a custom facade.
 
 Here is a naive and incomplete funneling facade:
