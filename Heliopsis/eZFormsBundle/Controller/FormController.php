@@ -6,48 +6,17 @@
 
 namespace Heliopsis\eZFormsBundle\Controller;
 
-use eZ\Publish\API\Repository\ContentService;
 use eZ\Publish\API\Repository\Values\Content\Location;
-use eZ\Publish\Core\MVC\Symfony\Controller\Content\ViewController;
-use eZ\Publish\Core\MVC\Symfony\View\ViewManagerInterface;
+use eZ\Publish\Core\MVC\Symfony\Security\Authorization\Attribute;
 use Heliopsis\eZFormsBundle\FormFacade\FormFacadeInterface;
 use Heliopsis\eZFormsBundle\FormHandler\ContentAwareHandlerInterface;
 use Heliopsis\eZFormsBundle\FormHandler\LocationAwareHandlerInterface;
-use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Security\Core\SecurityContextInterface;
-use DateTime;
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Exception;
 
-class FormController extends ViewController
+class FormController extends Controller
 {
-    /**
-     * @var \Heliopsis\eZFormsBundle\FormFacade\FormFacadeInterface
-     */
-    private $formFacade;
-
-    /**
-     * @var \eZ\Publish\API\Repository\ContentService
-     */
-    private $contentService;
-
-    /**
-     * @param FormFacadeInterface $formFacade
-     * @param ContentService $contentService
-     * @param ViewManagerInterface $viewManager
-     * @param SecurityContextInterface $securityContext
-     */
-    public function __construct(
-        FormFacadeInterface $formFacade,
-        ContentService $contentService,
-        ViewManagerInterface $viewManager,
-        SecurityContextInterface $securityContext
-    )
-    {
-        parent::__construct( $viewManager, $securityContext );
-        $this->formFacade = $formFacade;
-        $this->contentService = $contentService;
-    }
-
     /**
      * Main action for viewing content through a location in the repository.
      * Response will be cached with HttpCache validation model (Etag)
@@ -65,47 +34,43 @@ class FormController extends ViewController
      */
     public function formAction( $locationId, $viewType, $layout = false, array $params = array() )
     {
-        $this->performAccessChecks();
-        $response = $this->buildResponse();
-
-        try
+        if( !$this->isGranted( new Attribute( 'content', 'read' ) ) )
         {
-            $response->headers->set( 'X-Location-Id', $locationId );
+            throw new AccessDeniedException();
+        }
 
-            $request = $this->getRequest();
-            $location = $this->getRepository()->getLocationService()->loadLocation( $locationId );
-            $form = $this->formFacade->getForm( $location );
+        $request = $this->getRequest();
+        $location = $this->getLocationService()->loadLocation( $locationId );
+        $form = $this->getFormFacade()->getForm( $location );
 
-            if ( 'POST' === $request->getMethod() )
+        if ( 'POST' === $request->getMethod() )
+        {
+            $form->submit( $this->getRequest() );
+            if ( $form->isValid() )
             {
-                $form->submit( $this->getRequest() );
-                if ( $form->isValid() )
-                {
-                    $data = $form->getData();
-                    $handler = $this->getHandler( $location );
-                    $handler->handle( $data );
+                $data = $form->getData();
+                $handler = $this->getHandler( $location );
+                $handler->handle( $data );
 
-                    return $this->formFacade->getResponse( $location, $data );
-                }
+                return $this->getFormFacade()->getResponse( $location, $data );
             }
-
-            $response->setContent(
-                $this->viewManager->renderLocation(
-                    $location,
-                    $viewType,
-                    $params + array(
-                        'noLayout' => !$layout,
-                        'form' => $form->createView(),
-                    )
-                )
-            );
-
-            return $response;
         }
-        catch ( Exception $e )
+
+        $response = $this->container->get( 'ez_content' )->viewLocation(
+            $locationId,
+            $viewType,
+            $layout,
+            $params + array(
+                'form' => $form->createView(),
+            )
+        );
+
+        if ( 'POST' === $request->getMethod() )
         {
-            return $this->handleViewException( $response, $params, $e, $viewType, null, $locationId );
+            $response->setPrivate();
         }
+
+        return $response;
     }
 
     /**
@@ -114,7 +79,7 @@ class FormController extends ViewController
      */
     private function getHandler( Location $location )
     {
-        $handler = $this->formFacade->getHandler( $location );
+        $handler = $this->getFormFacade()->getHandler( $location );
         if ( $handler instanceof LocationAwareHandlerInterface )
         {
             $handler->setLocation( $location );
@@ -122,31 +87,33 @@ class FormController extends ViewController
 
         if ( $handler instanceof ContentAwareHandlerInterface )
         {
-            $handler->setContent( $this->contentService->loadContentByContentInfo( $location->contentInfo ) );
+            $handler->setContent( $this->getContentService()->loadContentByContentInfo( $location->contentInfo ) );
         }
 
         return $handler;
     }
 
     /**
-     * Build the response so that depending on settings it's cacheable
-     *
-     * @param string|null $etag
-     * @param \DateTime|null $lastModified
-     *
-     * @return \Symfony\Component\HttpFoundation\Response
-     * @see \eZ\Publish\Core\MVC\Symfony\Controller\Content\ViewController::buildResponse
+     * @return \eZ\Publish\Core\Repository\LocationService
      */
-    protected function buildResponse( $etag = null, DateTime $lastModified = null )
+    private function getLocationService()
     {
-        if ( 'POST' === $this->getRequest()->getMethod() )
-        {
-            $response = new Response();
-            $response->setPrivate();
-
-            return $response;
-        }
-        else return parent::buildResponse( $etag, $lastModified );
+        return $this->container->get( 'ezpublish.api.service.location' );
     }
 
+    /**
+     * @return \eZ\Publish\Core\Repository\ContentService
+     */
+    private function getContentService()
+    {
+        return $this->container->get( 'ezpublish.api.service.content' );
+    }
+
+    /**
+     * @return FormFacadeInterface
+     */
+    private function getFormFacade()
+    {
+        return $this->container->get( 'heliopsis_ezforms.facade' );
+    }
 }
